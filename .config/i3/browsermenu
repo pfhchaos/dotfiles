@@ -1,0 +1,6 @@
+#!/bin/sh
+browserlist="qutebrowser
+firefox-bin
+google-chrome-stable"
+browser="$(echo "$browserlist" | rofi -dmenu)"
+"$browser" 

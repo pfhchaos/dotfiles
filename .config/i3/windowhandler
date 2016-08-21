@@ -1,0 +1,24 @@
+#!/bin/bash
+set -x
+window_id=$(xdotool getactivewindow)
+testclass() {
+	class=($(xprop -id $window_id |grep "WM_CLASS"| sed -e 's:,::g'))
+	for i in $(seq 2 $(expr $(wc -w <<< ${class[*]}) - 1)); do
+		[[ ${class[${i}]} =~ $1 ]] && return 0
+	done ||
+	return 1
+}
+case $1 in
+	focus) case $2 in
+		left) (testclass Firefox && xdotool key --window $window_id ctrl+Left) || i3-msg focus left ;;
+		right) (testclass Firefox && xdotool key --window $window_id ctrl+Right) || i3-msg focus right ;;
+		esac ;;
+	move) case $2 in
+		left) (testclass Firefox && xdotool key --window $window_id ctrl+shift+Left) || i3-msg focus left ;;
+		right) (testclass Firefox && xdotool key --window $window_id ctrl+shift+Right) || i3-msg focus right ;;
+		esac ;;
+	kill)
+		(testclass Firefox && xdotool key --window $window_id ctrl+w) || i3-msg kill
+	;;
+esac
+
