@@ -11,6 +11,79 @@
 
 set $mod Mod4
 
+
+#import colors from Xresources
+
+set_from_resource $background 	i3wm.background 	  #FFFFFF
+
+set_from_resource $focusedbo 	i3wm.focused.border 	  #4C7899
+set_from_resource $focusedbg 	i3wm.focused.background 	  #285577
+set_from_resource $focusedtx 	i3wm.focused.text 	  #FFFFFF
+set_from_resource $focusedin 	i3wm.focused.indicator 	  #2E9EF4
+set_from_resource $focusedcb 	i3wm.focused.childBorder   #285577
+
+set_from_resource $inactivebo 	i3wm.inactive.border 	  #333333
+set_from_resource $inactivebg 	i3wm.inactive.background   #5F676A
+set_from_resource $inactivetx 	i3wm.inactive.text 	  #FFFFFF
+set_from_resource $inactivein 	i3wm.inactive.indicator 	  #484E50
+set_from_resource $inactivecb 	i3wm.inactive.childBorder  #5F676A
+
+set_from_resource $unfocusedbo 	i3wm.unfocused.border 	  #333333
+set_from_resource $unfocusedbg 	i3wm.unfocused.background  #222222
+set_from_resource $unfocusedtx 	i3wm.unfocused.text 	  #888888
+set_from_resource $unfocusedin 	i3wm.unfocused.indicater   #292D2E
+set_from_resource $unfocusedcb 	i3wm.unfocusedchildBorder #222222
+
+set_from_resource $urgentbo 	i3wm.urgent.border 	    #2F343A
+set_from_resource $urgentbg 	i3wm.urgent.background 	    #900000
+set_from_resource $urgenttx 	i3wm.urgent.text 	    #FFFFFF
+set_from_resource $urgentin 	i3wm.urgent.indicator 	    #900000
+set_from_resource $urgentcb 	i3wm.urgent.childBorder 	    #900000
+
+set_from_resource $placeholderbo i3wm.placeholder.border       #000000
+set_from_resource $placeholderbg i3wm.placeholder.background   #0C0C0C
+set_from_resource $placeholdertx i3wm.placeholder.text 	      #FFFFFF
+set_from_resource $placeholderin i3wm.placeholder.indicator    #000000
+set_from_resource $placeholdercb i3wm.placeholder.childBorder  #0C0C0C
+
+client.background $background
+
+client.focused 		$focusedbo     $focusedbg     $focusedtx     $focusedin     $focusedcb
+client.focused_inactive $inactivebo    $inactivebg    $inactivetx    $inactivein    $inactivecb
+client.unfocused	$unfocusedbo   $unfocusedbg   $unfocusedtx   $unfocusedin   $unfocusedcb
+client.urgent		$urgentbo      $urgentbg      $urgenttx      $urgentin      $urgentcb
+client.placeholder	$placeholderbo $placeholderbg $placeholdertx $placeholderin $placeholdercb
+
+
+#import i3bar colors from xresources
+set_from_resource $i3barbg i3bar.background 		#000000
+set_from_resource $i3barst i3bar.status 		#FFFFFF
+set_from_resource $i3barse i3bar.separator 		#666666
+
+set_from_resource $i3barfbg i3bar.focusedBackground 	#000000
+set_from_resource $i3barfst i3bar.focusedStatus 	#FFFFFF
+set_from_resource $i3barfse i3bar.focusedSeparator 	#666666
+
+set_from_resource $i3barwfbo i3bar.workspace.focused.border 	#4C7899
+set_from_resource $i3barwfbg i3bar.workspace.focused.background #285577
+set_from_resource $i3barwftx i3bar.workspace.focused.text 	#FFFFFF
+
+set_from_resource $i3barwabo i3bar.workspace.active.border 	#333333
+set_from_resource $i3barwabg i3bar.workspace.active.background 	#5F676A
+set_from_resource $i3barwatx i3bar.workspace.active.text 	#FFFFFF
+
+set_from_resource $i3barwibo i3bar.workspace.inactive.border 	#333333
+set_from_resource $i3barwibg i3bar.workspace.inactive.background #222222
+set_from_resource $i3barwitx i3bar.workspace.inactive.text 	#888888
+
+set_from_resource $i3barwubo i3bar.workspace.urgent.border 	#2F343A
+set_from_resource $i3barwubg i3bar.workspace.urgent.background 	#900000
+set_from_resource $i3barwutx i3bar.workspace.urgent.text 	#FFFFFF
+
+set_from_resource $i3barbbo i3bar.bindingMode.border 	 #333333
+set_from_resource $i3barbbg i3bar.bindingMode.background #222222
+set_from_resource $i3barbtx i3bar.bindingMode.text 	 #888888
+
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
 font Monospace 8
@@ -36,7 +109,7 @@ bindsym $mod+F6 exec pianoctl thumbdown
 bindsym $mod+Shift+s exec pianoctl chstation
 
 # start a terminal
-bindsym $mod+Return exec urxvtc -e tmux -2
+bindsym $mod+Return exec urxvtc -e tmux
 bindsym $mod+Shift+Return exec "$HOME/.config/i3/remoteterm"
 bindsym $mod+g exec qutebrowser
 bindsym $mod+Shift+g exec "$HOME/.config/i3/browsermenu"
@@ -65,6 +138,8 @@ bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
+bindsym $mod+Tilda scratchpad show
+bindsym $mod+Grave move scratchpad
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -158,12 +233,28 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	mode hide # dock | hide
+	i3bar_command i3bar -t
+	mode dock # dock | hide
 	modifier $mod
-	position bottom # top | bottom
+	position top # top | bottom
         status_command i3status
 #	tray_output none
 #	workspace_buttons no
+	colors {
+		background $i3barbg
+		statusline $i3barst
+		separator  $i3barse
+		focused_background $i3barfbg
+		focused_statusline $i3barfst
+		focused_separator  $i3barfse
+
+		focused_workspace	$i3barwfbo $i3barwfbg $i3barwftx
+		active_workspace	$i3barwabo $i3barwabg $i3barwatx
+		inactive_workspace	$i3barwibo $i3barwibg $i3barwitx
+		urgent_workspace	$i3barwubo $i3barwubg $i3barwutx
+		
+		binding_mode		$i3barbbo $i3barbbg $i3barbtx
+	}
 }
 
 # Border sizes
@@ -172,12 +263,6 @@ new_float normal 1
 # normal x | 1pixel | none | pixel x
 
 hide_edge_borders both # none | vertical | horizontal | both
-client.background color #000000
-#class				border	backgrd	text	indicator	
-client.focused			#000000	#000000	#ffffff	#00ff00		
-client.focused_inactive		#000000	#000000	#ffffff	#0000ff
-client.unfocused		#000000	#000000	#cccccc	#ff0000
-#client.urgent
 
 gaps inner 10
 
@@ -198,7 +283,7 @@ for_window [class="streaming_client"] fullscreen
 exec "xset -dpms"
 exec "xset s off"
 exec "skype"
-exec "nm-applet"
+#exec "nm-applet"
 exec "compton -b"
 exec "xiccd"
 exec "urxvtd"

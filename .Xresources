@@ -1,61 +1,150 @@
+#define FOREGROUND #d0d0d0
+#define BACKGROUND #000000
+#define RGBABACKGROUND #000000cc
+#define BACKGROUNDALT #555555
+#define TRANSBACKDEC 80
+#define HIGHLIGHT #0d68a8
 
-! Base16 Default Dark
-! Scheme: Chris Kempson (http://chriskempson.com)
+#define COLOR00 #000000
+#define COLOR08 #808080
+#define COLOR01 #ff0000
+#define COLOR09 #ff0000
+#define COLOR02 #33ff00
+#define COLOR10 #33ff00
+#define COLOR03 #ff0099
+#define COLOR11 #ff0099
+#define COLOR04 #0066ff
+#define COLOR12 #0066ff
+#define COLOR05 #cc00ff
+#define COLOR13 #cc00ff
+#define COLOR06 #00ffff
+#define COLOR14 #00ffff
+#define COLOR07 #d0d0d0
+#define COLOR15 #ffffff
 
-#define base00 #000000
-#define base01 #202020
-#define base02 #303030
-#define base03 #505050
-#define base04 #b0b0b0
-#define base05 #d0d0d0
-#define base06 #e0e0e0
-#define base07 #ffffff
-#define base08 #eb008a
-#define base09 #f29333
-#define base0A #f8ca12
-#define base0B #37b349
-#define base0C #00aabb
-#define base0D #0e5a94
-#define base0E #b31e8d
-#define base0F #7a2d00
+! special
+*.foreground:   FOREGROUND
+*.background:   BACKGROUND
+*.cursorColor:  COLOR07
 
-*.foreground:   base05
-*.background:   base00
-*.cursorColor:  base05
+! black
+*.color0:       COLOR00
+*.color8:       COLOR08
 
-*.color0:       base00
-*.color1:       base08
-*.color2:       base0B
-*.color3:       base0A
-*.color4:       base0D
-*.color5:       base0E
-*.color6:       base0C
-*.color7:       base05
+! red
+*.color1:       COLOR01
+*.color9:       COLOR09
 
-*.color8:       base03
-*.color9:       base09
-*.color10:      base01
-*.color11:      base02
-*.color12:      base04
-*.color13:      base06
-*.color14:      base0F
-*.color15:      base07
+! green
+*.color2:       COLOR02
+*.color10:      COLOR10
 
-URxvt*termName: xterm-color
-URxvt.background: [60]base00
+! yellow
+*.color3:       COLOR03
+*.color11:      COLOR11
+
+! blue
+*.color4:       COLOR04
+*.color12:      COLOR12
+
+! magenta
+*.color5:       COLOR05
+*.color13:      COLOR13
+
+! cyan
+*.color6:       COLOR06
+*.color14:      COLOR14
+
+! white
+*.color7:       COLOR07
+*.color15:      COLOR15
+
+! Urxvt
+URxvt*termName: xterm-256color
+URxvt.background: [TRANSBACKDEC]BACKGROUND
+URxvt.foreground: FOREGROUND
 URxvt.scrollBar: false
 URxvt.depth: 32
 URxvt.secondaryWheel: false
 URxvt.font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
 
-! Rofi settings
-rofi.opacity: 90
+! Rofi
+rofi.opacity: TRANSBACKDEC
+rofi.color-window: BACKGROUND,BACKGROUNDALT,BACKGROUNDALT
+rofi.color-normal: BACKGROUND,FOREGROUND,BACKGROUND,HILIGHT,FOREGROUND
 rofi.width: 50
-rofi.lines: 7
+rofi.lines: 5
+rofi.columns: 1
 rofi.font: SourceCodePro 9
-rofi.color-enabled: true
-rofi.color-window: base00, base05
-rofi.color-normal: base00, base05, base01, base05, base00
-rofi.color-urgent: base00, base08, base01, base08, base00
-rofi.color-active: base00, base09, base01, base09, base00
-rofi.hide-scrollbar: true
+rofi.bw: 2
+rofi.loc: 0
+rofi.padding: 2
+rofi.yoffset: -2
+rofi.xoffset: 0
+rofi.fixed-num-lines: false
+rofi.hmode: false
+rofi.terminal: x-terminal-emulator
+rofi.ssh-set-title: true
+
+! i3 settings
+
+i3wm.background: BACKGROUND
+
+i3wm.focused.border: COLOR08
+i3wm.focused.background: BACKGROUND
+i3wm.focused.text: COLOR12
+!i3wm.focused.indicator:	 #
+i3wm.focused.childBorder: COLOR08
+
+i3wm.inactive.border: COLOR08
+i3wm.inactive.background: BACKGROUND
+i3wm.inactive.text: FOREGROUND
+!i3wm.inactive.indicator:	 #
+i3wm.inactive.childBorder: COLOR08
+
+i3wm.unfocused.border: BACKGROUND
+i3wm.unfocused.background: BACKGROUND
+i3wm.unfocused.text: FOREGROUND
+!i3wm.unfocused.indicator:	 #
+i3wm.unfocused.childBorder: BACKGROUND
+
+i3wm.urgent.border:	 COLOR09
+i3wm.urgent.background: BACKGROUND
+i3wm.urgent.text: COLOR09
+!i3wm.urgent.indicator:	 #
+i3wm.urgent.childBorder: COLOR09
+
+i3wm.placeholder.border: BACKGROUND
+i3wm.placeholder.background: BACKGROUND
+i3wm.placeholder.text: FOREGROUND
+!i3wm.placeholder.indicator:	 #
+i3wm.placeholder.childBorder: BACKGROUND
+
+!i3bar
+i3bar.background: 		RGBABACKGROUND
+i3bar.status: 			FOREGROUND
+i3bar.separator: 		FOREGROUND
+
+i3bar.focusedBackground: 	RGBABACKGROUND
+i3bar.focusedStatus: 		FOREGROUND
+i3bar.focusedSeparator: 	FOREGROUND
+
+i3bar.workspace.focused.border: 	BACKGROUND
+i3bar.workspace.focused.background: 	BACKGROUND
+i3bar.workspace.focused.text: 		COLOR14
+
+i3bar.workspace.active.border: 		BACKGROUND
+i3bar.workspace.active.background: 	BACKGROUND
+i3bar.workspace.active.text: 		COLOR14
+
+i3bar.workspace.inactive.border: 	BACKGROUND
+i3bar.workspace.inactive.background: 	BACKGROUND
+i3bar.workspace.inactive.text: 		FOREGROUND
+
+i3bar.workspace.urgent.border: 		BACKGROUND
+i3bar.workspace.urgent.background: 	BACKGROUND
+i3bar.workspace.urgent.text: 		COLOR09
+
+i3bar.bindingMode.border: 		COLOR09
+i3bar.bindingMode.background: 		COLOR01
+i3bar.bindingMode.text: 		FOREGROUND
