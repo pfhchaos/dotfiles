@@ -131,11 +131,11 @@ i3bar.focusedSeparator: 	FOREGROUND
 
 i3bar.workspace.focused.border: 	BACKGROUND
 i3bar.workspace.focused.background: 	BACKGROUND
-i3bar.workspace.focused.text: 		COLOR14
+i3bar.workspace.focused.text: 		COLOR12
 
 i3bar.workspace.active.border: 		BACKGROUND
 i3bar.workspace.active.background: 	BACKGROUND
-i3bar.workspace.active.text: 		COLOR14
+i3bar.workspace.active.text: 		COLOR12
 
 i3bar.workspace.inactive.border: 	BACKGROUND
 i3bar.workspace.inactive.background: 	BACKGROUND
