@@ -17,38 +17,38 @@ set $mod Mod4
 set_from_resource $background 	i3wm.background 	  #FFFFFF
 
 set_from_resource $focusedbo 	i3wm.focused.border 	  #4C7899
-set_from_resource $focusedbg 	i3wm.focused.background 	  #285577
+set_from_resource $focusedbg 	i3wm.focused.background   #285577
 set_from_resource $focusedtx 	i3wm.focused.text 	  #FFFFFF
 set_from_resource $focusedin 	i3wm.focused.indicator 	  #2E9EF4
-set_from_resource $focusedcb 	i3wm.focused.childBorder   #285577
+set_from_resource $focusedcb 	i3wm.focused.childBorder  #285577
 
 set_from_resource $inactivebo 	i3wm.inactive.border 	  #333333
-set_from_resource $inactivebg 	i3wm.inactive.background   #5F676A
+set_from_resource $inactivebg 	i3wm.inactive.background  #5F676A
 set_from_resource $inactivetx 	i3wm.inactive.text 	  #FFFFFF
-set_from_resource $inactivein 	i3wm.inactive.indicator 	  #484E50
-set_from_resource $inactivecb 	i3wm.inactive.childBorder  #5F676A
+set_from_resource $inactivein 	i3wm.inactive.indicator   #484E50
+set_from_resource $inactivecb 	i3wm.inactive.childBorder #5F676A
 
 set_from_resource $unfocusedbo 	i3wm.unfocused.border 	  #333333
-set_from_resource $unfocusedbg 	i3wm.unfocused.background  #222222
+set_from_resource $unfocusedbg 	i3wm.unfocused.background #222222
 set_from_resource $unfocusedtx 	i3wm.unfocused.text 	  #888888
-set_from_resource $unfocusedin 	i3wm.unfocused.indicater   #292D2E
+set_from_resource $unfocusedin 	i3wm.unfocused.indicater  #292D2E
 set_from_resource $unfocusedcb 	i3wm.unfocusedchildBorder #222222
 
 set_from_resource $urgentbo 	i3wm.urgent.border 	    #2F343A
 set_from_resource $urgentbg 	i3wm.urgent.background 	    #900000
 set_from_resource $urgenttx 	i3wm.urgent.text 	    #FFFFFF
 set_from_resource $urgentin 	i3wm.urgent.indicator 	    #900000
-set_from_resource $urgentcb 	i3wm.urgent.childBorder 	    #900000
+set_from_resource $urgentcb 	i3wm.urgent.childBorder     #900000
 
 set_from_resource $placeholderbo i3wm.placeholder.border       #000000
 set_from_resource $placeholderbg i3wm.placeholder.background   #0C0C0C
-set_from_resource $placeholdertx i3wm.placeholder.text 	      #FFFFFF
+set_from_resource $placeholdertx i3wm.placeholder.text 	       #FFFFFF
 set_from_resource $placeholderin i3wm.placeholder.indicator    #000000
 set_from_resource $placeholdercb i3wm.placeholder.childBorder  #0C0C0C
 
 client.background $background
 
-client.focused 		$focusedbo     $focusedbg     $focusedtx     $focusedin     $focusedcb
+client.focused 	        $focusedbo     $focusedbg     $focusedtx     $focusedin     $focusedcb
 client.focused_inactive $inactivebo    $inactivebg    $inactivetx    $inactivein    $inactivecb
 client.unfocused	$unfocusedbo   $unfocusedbg   $unfocusedtx   $unfocusedin   $unfocusedcb
 client.urgent		$urgentbo      $urgentbg      $urgenttx      $urgentin      $urgentcb
@@ -72,9 +72,9 @@ set_from_resource $i3barwabo i3bar.workspace.active.border 	#333333
 set_from_resource $i3barwabg i3bar.workspace.active.background 	#5F676A
 set_from_resource $i3barwatx i3bar.workspace.active.text 	#FFFFFF
 
-set_from_resource $i3barwibo i3bar.workspace.inactive.border 	#333333
+set_from_resource $i3barwibo i3bar.workspace.inactive.border 	 #333333
 set_from_resource $i3barwibg i3bar.workspace.inactive.background #222222
-set_from_resource $i3barwitx i3bar.workspace.inactive.text 	#888888
+set_from_resource $i3barwitx i3bar.workspace.inactive.text 	 #888888
 
 set_from_resource $i3barwubo i3bar.workspace.urgent.border 	#2F343A
 set_from_resource $i3barwubg i3bar.workspace.urgent.background 	#900000
@@ -238,7 +238,7 @@ bar {
 	modifier $mod
 	position top # top | bottom
         status_command i3status
-#	tray_output none
+	tray_output none
 #	workspace_buttons no
 	colors {
 		background $i3barbg

@@ -85,6 +85,7 @@ rofi.fixed-num-lines: false
 rofi.hmode: false
 rofi.terminal: x-terminal-emulator
 rofi.ssh-set-title: true
+rofi.hide-scrollbar: true
 
 ! i3 settings
 
