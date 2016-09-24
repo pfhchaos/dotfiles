@@ -1,0 +1,20 @@
+#!/bin/bash
+rundir="/run/user/$(id -u)/esdesk"
+
+case $1 in
+start)
+	[ -d "$rundir" ] || mkdir "$rundir"
+	xrandr | grep " connected " | while read output status geometry other; do
+		xwinwrap -ni -g "$geometry" -s -b -ov -- $0 env WID & &> /dev/null
+		echo "$!" > "$rundir/$output.pid"
+	done
+;;
+env)
+	XSCREENSAVER_WINDOW="$2" electricsheep &> /dev/null
+;;
+kill)
+	for i in $rundir/*.pid; do
+		kill $(cat $i)
+	done
+;;
+esac
