@@ -1,6 +1,5 @@
 #define FOREGROUND #d0d0d0
 #define BACKGROUND #000000
-#define RGBABACKGROUND #000000cc
 #define BACKGROUNDALT #555555
 #define TRANSBACKDEC 80
 #define HIGHLIGHT #0d68a8
@@ -21,6 +20,11 @@
 #define COLOR14 #00ffff
 #define COLOR07 #d0d0d0
 #define COLOR15 #ffffff
+
+#define TRANS aa
+
+#define CAT(a, ...) PRIMITIVE_CAT(a, __VA_ARGS__)
+#define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
 
 ! special
 *.foreground:   FOREGROUND
@@ -91,44 +95,44 @@ rofi.hide-scrollbar: true
 
 i3wm.background: BACKGROUND
 
-i3wm.focused.border: COLOR08
-i3wm.focused.background: BACKGROUND
-i3wm.focused.text: COLOR12
+i3wm.focused.border: 		CAT(COLOR08,TRANS)
+i3wm.focused.background: 	CAT(BACKGROUND,TRANS)
+i3wm.focused.text: 		COLOR12
 !i3wm.focused.indicator:	 #
-i3wm.focused.childBorder: COLOR08
+i3wm.focused.childBorder: 	CAT(COLOR08,TRANS)
 
-i3wm.inactive.border: COLOR08
-i3wm.inactive.background: BACKGROUND
-i3wm.inactive.text: FOREGROUND
+i3wm.inactive.border: 		CAT(COLOR08,TRANS)
+i3wm.inactive.background: 	CAT(BACKGROUND,TRANS)
+i3wm.inactive.text: 		FOREGROUND
 !i3wm.inactive.indicator:	 #
-i3wm.inactive.childBorder: COLOR08
+i3wm.inactive.childBorder: 	CAT(COLOR08,TRANS)
 
-i3wm.unfocused.border: BACKGROUND
-i3wm.unfocused.background: BACKGROUND
-i3wm.unfocused.text: FOREGROUND
+i3wm.unfocused.border: 		CAT(BACKGROUND,TRANS)
+i3wm.unfocused.background: 	CAT(BACKGROUND,TRANS)
+i3wm.unfocused.text: 		FOREGROUND
 !i3wm.unfocused.indicator:	 #
-i3wm.unfocused.childBorder: BACKGROUND
+i3wm.unfocused.childBorder: 	CAT(BACKGROUND,TRANS)
 
-i3wm.urgent.border:	 COLOR09
-i3wm.urgent.background: BACKGROUND
-i3wm.urgent.text: COLOR09
+i3wm.urgent.border:	 	CAT(COLOR09,TRANS)
+i3wm.urgent.background: 	CAT(BACKGROUND,TRANS)
+i3wm.urgent.text: 		COLOR09
 !i3wm.urgent.indicator:	 #
-i3wm.urgent.childBorder: COLOR09
+i3wm.urgent.childBorder:	CAT(COLOR09,TRANS)
 
-i3wm.placeholder.border: BACKGROUND
-i3wm.placeholder.background: BACKGROUND
-i3wm.placeholder.text: FOREGROUND
+i3wm.placeholder.border: 	CAT(BACKGROUND,TRANS)
+i3wm.placeholder.background: 	CAT(BACKGROUND,TRANS)
+i3wm.placeholder.text: 		FOREGROUND
 !i3wm.placeholder.indicator:	 #
-i3wm.placeholder.childBorder: BACKGROUND
+i3wm.placeholder.childBorder: 	CAT(BACKGROUND,TRANS)
 
 !i3bar
-i3bar.background: 		RGBABACKGROUND
-i3bar.status: 			FOREGROUND
-i3bar.separator: 		FOREGROUND
+i3bar.background: 			CAT(BACKGROUND,TRANS)
+i3bar.status: 				FOREGROUND
+i3bar.separator: 			FOREGROUND
 
-i3bar.focusedBackground: 	RGBABACKGROUND
-i3bar.focusedStatus: 		FOREGROUND
-i3bar.focusedSeparator: 	FOREGROUND
+i3bar.focusedBackground: 		CAT(BACKGROUND,TRANS)
+i3bar.focusedStatus: 			FOREGROUND
+i3bar.focusedSeparator: 		FOREGROUND
 
 i3bar.workspace.focused.border: 	BACKGROUND
 i3bar.workspace.focused.background: 	BACKGROUND

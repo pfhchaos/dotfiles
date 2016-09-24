@@ -101,8 +101,8 @@ floating_modifier $mod
 bindsym XF86AudioRaiseVolume exec pulseaudio-ctl up
 bindsym XF86AudioLowerVolume exec pulseaudio-ctl down
 bindsym XF86AudioMute exec pulseaudio-ctl mute
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
+bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
 bindsym $mod+F7 exec pianoctl playpause
 bindsym $mod+F8 exec pianoctl skip
 bindsym $mod+F6 exec pianoctl thumbdown
@@ -239,6 +239,7 @@ bar {
 	position top # top | bottom
         status_command i3status
 	tray_output none
+	status_command i3blocks
 #	workspace_buttons no
 	colors {
 		background $i3barbg
