@@ -1,3 +1,5 @@
+hsetroot -solid #000000
+
 xrdb -merge "$HOME/.Xresources"
 . $HOME/.profile
 eval "$(gpg-agent --daemon)"

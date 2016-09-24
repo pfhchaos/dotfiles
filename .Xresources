@@ -93,7 +93,7 @@ rofi.hide-scrollbar: true
 
 ! i3 settings
 
-i3wm.background: BACKGROUND
+i3wm.background: CAT(BACKGROUND,TRANS)
 
 i3wm.focused.border: 		CAT(COLOR08,TRANS)
 i3wm.focused.background: 	CAT(BACKGROUND,TRANS)
