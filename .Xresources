@@ -157,8 +157,6 @@ i3bar.workspace.urgent.text: 		COLOR09
 i3bar.bindingMode.border: 		COLOR09
 i3bar.bindingMode.background: 		COLOR01
 i3bar.bindingMode.text: 		FOREGROUND
-A
-TRANSDEC(CAT(0x,TRANS))
 ! special
 *.foreground:   FOREGROUND
 *.background:   BACKGROUND
@@ -286,6 +284,3 @@ i3bar.workspace.urgent.text: 		COLOR09
 i3bar.bindingMode.border: 		COLOR09
 i3bar.bindingMode.background: 		COLOR01
 i3bar.bindingMode.text: 		FOREGROUND
-A
-TRANSDEC(CAT(0x,TRANS))
-TRANSDEC(0xd)
