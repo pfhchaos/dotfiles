@@ -26,6 +26,10 @@
 #define CAT(a, ...) PRIMITIVE_CAT(a, __VA_ARGS__)
 #define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
 
+#define STRINGIFY(x) #x
+#define TRANSDEC(x) STRINGIFY(x)
+
+#define A TRANSDEC(CAT(0x,TRANS))
 ! special
 *.foreground:   FOREGROUND
 *.background:   BACKGROUND
@@ -153,3 +157,135 @@ i3bar.workspace.urgent.text: 		COLOR09
 i3bar.bindingMode.border: 		COLOR09
 i3bar.bindingMode.background: 		COLOR01
 i3bar.bindingMode.text: 		FOREGROUND
+A
+TRANSDEC(CAT(0x,TRANS))
+! special
+*.foreground:   FOREGROUND
+*.background:   BACKGROUND
+*.cursorColor:  COLOR07
+
+! black
+*.color0:       COLOR00
+*.color8:       COLOR08
+
+! red
+*.color1:       COLOR01
+*.color9:       COLOR09
+
+! green
+*.color2:       COLOR02
+*.color10:      COLOR10
+
+! yellow
+*.color3:       COLOR03
+*.color11:      COLOR11
+
+! blue
+*.color4:       COLOR04
+*.color12:      COLOR12
+
+! magenta
+*.color5:       COLOR05
+*.color13:      COLOR13
+
+! cyan
+*.color6:       COLOR06
+*.color14:      COLOR14
+
+! white
+*.color7:       COLOR07
+*.color15:      COLOR15
+
+! Urxvt
+URxvt*termName: xterm-256color
+URxvt.background: [TRANSBACKDEC]BACKGROUND
+URxvt.foreground: FOREGROUND
+URxvt.scrollBar: false
+URxvt.depth: 32
+URxvt.secondaryWheel: false
+URxvt.font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
+
+! Rofi
+rofi.opacity: TRANSBACKDEC
+rofi.color-window: BACKGROUND,BACKGROUNDALT,BACKGROUNDALT
+rofi.color-normal: BACKGROUND,FOREGROUND,BACKGROUND,HILIGHT,FOREGROUND
+rofi.width: 50
+rofi.lines: 5
+rofi.columns: 1
+rofi.font: SourceCodePro 9
+rofi.bw: 2
+rofi.loc: 0
+rofi.padding: 2
+rofi.yoffset: -2
+rofi.xoffset: 0
+rofi.fixed-num-lines: false
+rofi.hmode: false
+rofi.terminal: x-terminal-emulator
+rofi.ssh-set-title: true
+rofi.hide-scrollbar: true
+
+! i3 settings
+
+i3wm.background: CAT(BACKGROUND,TRANS)
+
+i3wm.focused.border: 		CAT(COLOR08,TRANS)
+i3wm.focused.background: 	CAT(BACKGROUND,TRANS)
+i3wm.focused.text: 		COLOR12
+!i3wm.focused.indicator:	 #
+i3wm.focused.childBorder: 	CAT(COLOR08,TRANS)
+
+i3wm.inactive.border: 		CAT(COLOR08,TRANS)
+i3wm.inactive.background: 	CAT(BACKGROUND,TRANS)
+i3wm.inactive.text: 		FOREGROUND
+!i3wm.inactive.indicator:	 #
+i3wm.inactive.childBorder: 	CAT(COLOR08,TRANS)
+
+i3wm.unfocused.border: 		CAT(BACKGROUND,TRANS)
+i3wm.unfocused.background: 	CAT(BACKGROUND,TRANS)
+i3wm.unfocused.text: 		FOREGROUND
+!i3wm.unfocused.indicator:	 #
+i3wm.unfocused.childBorder: 	CAT(BACKGROUND,TRANS)
+
+i3wm.urgent.border:	 	CAT(COLOR09,TRANS)
+i3wm.urgent.background: 	CAT(BACKGROUND,TRANS)
+i3wm.urgent.text: 		COLOR09
+!i3wm.urgent.indicator:	 #
+i3wm.urgent.childBorder:	CAT(COLOR09,TRANS)
+
+i3wm.placeholder.border: 	CAT(BACKGROUND,TRANS)
+i3wm.placeholder.background: 	CAT(BACKGROUND,TRANS)
+i3wm.placeholder.text: 		FOREGROUND
+!i3wm.placeholder.indicator:	 #
+i3wm.placeholder.childBorder: 	CAT(BACKGROUND,TRANS)
+
+!i3bar
+i3bar.background: 			CAT(BACKGROUND,TRANS)
+i3bar.status: 				FOREGROUND
+i3bar.separator: 			FOREGROUND
+
+i3bar.focusedBackground: 		CAT(BACKGROUND,TRANS)
+i3bar.focusedStatus: 			FOREGROUND
+i3bar.focusedSeparator: 		FOREGROUND
+
+i3bar.workspace.focused.border: 	BACKGROUND
+i3bar.workspace.focused.background: 	BACKGROUND
+i3bar.workspace.focused.text: 		COLOR12
+
+i3bar.workspace.active.border: 		BACKGROUND
+i3bar.workspace.active.background: 	BACKGROUND
+i3bar.workspace.active.text: 		COLOR12
+
+i3bar.workspace.inactive.border: 	BACKGROUND
+i3bar.workspace.inactive.background: 	BACKGROUND
+i3bar.workspace.inactive.text: 		FOREGROUND
+
+i3bar.workspace.urgent.border: 		BACKGROUND
+i3bar.workspace.urgent.background: 	BACKGROUND
+i3bar.workspace.urgent.text: 		COLOR09
+
+i3bar.bindingMode.border: 		COLOR09
+i3bar.bindingMode.background: 		COLOR01
+i3bar.bindingMode.text: 		FOREGROUND
+A
+TRANSDEC(CAT(0x,TRANS))
+TRANSDEC(0xd)
