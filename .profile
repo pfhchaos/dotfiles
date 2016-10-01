@@ -9,3 +9,4 @@ export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
 export EDITOR="vim"
 alias emerge="sudo emerge"
+alias userctl="systemctl --user"
