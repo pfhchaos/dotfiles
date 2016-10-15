@@ -67,6 +67,8 @@
 *.color7:       COLOR07
 *.color15:      COLOR15
 
+*font: xft:Terminus
+
 ! Urxvt
 URxvt*termName: xterm-256color
 URxvt.background: [TRANSBACKDEC]BACKGROUND
@@ -74,7 +76,7 @@ URxvt.foreground: FOREGROUND
 URxvt.scrollBar: false
 URxvt.depth: 32
 URxvt.secondaryWheel: false
-URxvt.font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
+URxvt.font: xft:Terminus,xft:unifont,xft:FontAwesome:pixelsize=8,xft:Inconsolata\ for\ Powerline:pixelsize=12
 
 ! Rofi
 rofi.opacity: TRANSBACKDEC
@@ -83,7 +85,6 @@ rofi.color-normal: BACKGROUND,FOREGROUND,BACKGROUND,HILIGHT,FOREGROUND
 rofi.width: 50
 rofi.lines: 5
 rofi.columns: 1
-rofi.font: SourceCodePro 9
 rofi.bw: 2
 rofi.loc: 0
 rofi.padding: 2
