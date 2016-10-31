@@ -113,7 +113,7 @@ bindsym $mod+Return exec termite -e tmux
 bindsym $mod+Shift+Return exec "$HOME/.config/i3/remoteterm"
 bindsym $mod+g exec qutebrowser
 bindsym $mod+Shift+g exec "$HOME/.config/i3/browsermenu"
-bindsym $mod+o exec spacefm
+bindsym $mod+p exec rofi-pass
 
 # kill focused window
 bindsym $mod+Shift+q kill
