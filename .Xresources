@@ -266,22 +266,22 @@ i3bar.focusedBackground: 		CAT(BACKGROUND,TRANS)
 i3bar.focusedStatus: 			FOREGROUND
 i3bar.focusedSeparator: 		FOREGROUND
 
-i3bar.workspace.focused.border: 	BACKGROUND
-i3bar.workspace.focused.background: 	BACKGROUND
+i3bar.workspace.focused.border: 	CAT(BACKGROUND,TRANS)
+i3bar.workspace.focused.background: 	CAT(BACKGROUND,TRANS)
 i3bar.workspace.focused.text: 		COLOR12
 
-i3bar.workspace.active.border: 		BACKGROUND
-i3bar.workspace.active.background: 	BACKGROUND
+i3bar.workspace.active.border: 		CAT(BACKGROUND,TRANS)
+i3bar.workspace.active.background: 	CAT(BACKGROUND,TRANS)
 i3bar.workspace.active.text: 		COLOR12
 
-i3bar.workspace.inactive.border: 	BACKGROUND
-i3bar.workspace.inactive.background: 	BACKGROUND
+i3bar.workspace.inactive.border: 	CAT(BACKGROUND,TRANS)
+i3bar.workspace.inactive.background: 	CAT(BACKGROUND,TRANS)
 i3bar.workspace.inactive.text: 		FOREGROUND
 
-i3bar.workspace.urgent.border: 		BACKGROUND
-i3bar.workspace.urgent.background: 	BACKGROUND
+i3bar.workspace.urgent.border: 		CAT(BACKGROUND,TRANS)
+i3bar.workspace.urgent.background: 	CAT(BACKGROUND,TRANS)
 i3bar.workspace.urgent.text: 		COLOR09
 
-i3bar.bindingMode.border: 		COLOR09
-i3bar.bindingMode.background: 		COLOR01
+i3bar.bindingMode.border: 		CAT(COLOR09,TRANS)
+i3bar.bindingMode.background: 		CAT(COLOR09,TRANS)
 i3bar.bindingMode.text: 		FOREGROUND
