@@ -1,0 +1,11 @@
+[Unit]
+Description=Compton Compsiting Manager
+Requires=xorg.service
+After=xorg.service
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Environment="DISPLAY=:0"
+ExecStart=/usr/bin/compton

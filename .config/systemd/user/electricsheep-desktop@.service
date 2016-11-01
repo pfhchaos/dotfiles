@@ -1,0 +1,10 @@
+[Unit]
+Description=Runs Electricsheep as the desktop wallpaper on the given output
+Requires=compton.service
+
+[Service]
+Environment="DISPLAY=:0"
+ExecStart=/home/chaos/bin/electricsheep-desktop start %i
+
+[Install]
+WantedBy=default.target

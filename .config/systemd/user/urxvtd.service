@@ -1,0 +1,12 @@
+[Unit]
+Description=Rxtv-Unicode Daemon
+Requires=xorg.service
+Wants=xresources.service
+After=xorg.service xresources.service
+
+[Install]
+WantedBy=default.target
+
+[Service]
+Environment="DISPLAY=:0"
+ExecStart=/usr/bin/urxvtd

@@ -1,0 +1,15 @@
+[Unit]
+Description=Xorg
+Documentation=man:Xorg(1)
+Requires=xorg.socket
+After=xorg.socket
+# Add this line
+Before=xorg.target
+
+[Service]
+ExecStart=/usr/bin/Xorg $DISPLAY -nolisten tcp -noreset -verbose 1 vt1
+ExecStartPost=systemctl --user set-environment DISPLAY=:0
+SuccessExitStatus=0 1
+
+[Install]
+Also=xorg.socket
