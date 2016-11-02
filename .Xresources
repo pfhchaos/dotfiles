@@ -227,17 +227,17 @@ rofi.hide-scrollbar: true
 
 i3wm.background: CAT(BACKGROUND,TRANS)
 
-i3wm.focused.border: 		CAT(COLOR08,TRANS)
+i3wm.focused.border: 		CAT(BACKGROUND,TRANS)
 i3wm.focused.background: 	CAT(BACKGROUND,TRANS)
 i3wm.focused.text: 		COLOR12
 !i3wm.focused.indicator:	 #
-i3wm.focused.childBorder: 	CAT(COLOR08,TRANS)
+i3wm.focused.childBorder: 	CAT(BACKGROUND,TRANS)
 
-i3wm.inactive.border: 		CAT(COLOR08,TRANS)
+i3wm.inactive.border: 		CAT(BACKGROUND,TRANS)
 i3wm.inactive.background: 	CAT(BACKGROUND,TRANS)
 i3wm.inactive.text: 		FOREGROUND
 !i3wm.inactive.indicator:	 #
-i3wm.inactive.childBorder: 	CAT(COLOR08,TRANS)
+i3wm.inactive.childBorder: 	CAT(BACKGROUND,TRANS)
 
 i3wm.unfocused.border: 		CAT(BACKGROUND,TRANS)
 i3wm.unfocused.background: 	CAT(BACKGROUND,TRANS)
@@ -245,11 +245,11 @@ i3wm.unfocused.text: 		FOREGROUND
 !i3wm.unfocused.indicator:	 #
 i3wm.unfocused.childBorder: 	CAT(BACKGROUND,TRANS)
 
-i3wm.urgent.border:	 	CAT(COLOR09,TRANS)
+i3wm.urgent.border:	 	CAT(BACKGROUND,TRANS)
 i3wm.urgent.background: 	CAT(BACKGROUND,TRANS)
 i3wm.urgent.text: 		COLOR09
 !i3wm.urgent.indicator:	 #
-i3wm.urgent.childBorder:	CAT(COLOR09,TRANS)
+i3wm.urgent.childBorder:	CAT(BACKGROUND,TRANS)
 
 i3wm.placeholder.border: 	CAT(BACKGROUND,TRANS)
 i3wm.placeholder.background: 	CAT(BACKGROUND,TRANS)

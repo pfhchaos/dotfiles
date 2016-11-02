@@ -2,4 +2,4 @@
 serverlist="paradoxzone.ddns.net
 pfhchaos@enterprise.whatbox.ca"
 server="$(echo "$serverlist" | rofi -dmenu)"
-urxvtc -e ssh "$server" 
+termite -e ssh "$server" 
