@@ -267,6 +267,9 @@ hide_edge_borders both # none | vertical | horizontal | both
 
 gaps inner 10
 
+
+for_window [class="qutebrowser"] title_format "qutebrowser | %title"
+
 for_window [class="FTL"] floating enable
 for_window [class="Wine"] floating enable
 for_window [class="mednafen"] floating enable

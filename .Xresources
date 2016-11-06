@@ -21,7 +21,7 @@
 #define COLOR07 #d0d0d0
 #define COLOR15 #ffffff
 
-#define TRANS aa
+#define TRANS cc
 
 #define CAT(a, ...) PRIMITIVE_CAT(a, __VA_ARGS__)
 #define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
@@ -68,15 +68,6 @@
 *.color15:      COLOR15
 
 *font: xft:Terminus
-
-! Urxvt
-URxvt*termName: xterm-256color
-URxvt.background: [TRANSBACKDEC]BACKGROUND
-URxvt.foreground: FOREGROUND
-URxvt.scrollBar: false
-URxvt.depth: 32
-URxvt.secondaryWheel: false
-URxvt.font: xft:Terminus,xft:unifont,xft:FontAwesome:pixelsize=8,xft:Inconsolata\ for\ Powerline:pixelsize=12
 
 ! Rofi
 rofi.opacity: TRANSBACKDEC
