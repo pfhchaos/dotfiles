@@ -1,0 +1,39 @@
+[general]
+accounts = main
+pythonfile = ~/.config/offlineimap/get_pass.py
+
+[Account main]
+localrepository = main-local
+remoterepository = gmail-remote
+status_backent = sqlite
+
+[Repository gmail-remote]
+type = Gmail
+remoteuser = pfh.chaos@gmail.com
+remotepasseval = get_pass("pfh.chaos@gmail.com")
+
+#nametrans = lambda foldername: re.sub ('^\[gmail\]', 'bak',
+#                               re.sub ('sent_mail', 'sent',
+#                               re.sub ('starred', 'flagged',
+#                               re.sub (' ', '_', foldername.lower()))))
+#folderfilter = lambda foldername: foldername not in ['[Gmail]/All Mail']
+# Necessary as of OfflineIMAP 6.5.4
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+[Repository main-local]
+
+type = Maildir
+localfolders = mail/pfh.chaos@gmail.com/
+#nametrans = lambda foldername: re.sub ('^\[gmail\]', 'bak',
+#                               re.sub ('sent_mail', 'sent',
+#                               re.sub ('starred', 'flagged',
+#                               re.sub (' ', '_', foldername.lower()))))
+
+
+[mbnames]
+enabled = yes
+filename = ~/.mutt/mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
