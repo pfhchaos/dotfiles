@@ -2,6 +2,7 @@
 [Unit]
 Description=X resource loader
 Requires=xorg.service
+After=xorg.service
 
 [Service]
 Environment="DISPLAY=:0"
