@@ -109,7 +109,7 @@ bindsym $mod+F6 exec pianoctl thumbdown
 bindsym $mod+Shift+s exec pianoctl chstation
 
 # start a terminal
-bindsym $mod+Return exec termite -e tmux
+bindsym $mod+Return exec termite
 bindsym $mod+Shift+Return exec "$HOME/.config/i3/remoteterm"
 bindsym $mod+g exec qutebrowser
 bindsym $mod+Shift+g exec "$HOME/.config/i3/browsermenu"
