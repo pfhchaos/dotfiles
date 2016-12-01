@@ -1,0 +1,8 @@
+[Unit]
+Description=Offlineimap timer unit
+
+[Timer]
+OnCalendar=*:0/15
+
+[Install]
+WantedBy=default.target
