@@ -1,5 +1,6 @@
+
 [Unit]
-Description=Rxtv-Unicode Daemon
+Description=Gnome Polkit Authenticator
 Requires=xorg.service
 Wants=xresources.service
 After=xorg.service xresources.service
@@ -8,4 +9,4 @@ After=xorg.service xresources.service
 WantedBy=default.target
 
 [Service]
-ExecStart=/usr/bin/urxvtd
+ExecStart=/usr/libexec/polkit-gnome-authentication-agent-1

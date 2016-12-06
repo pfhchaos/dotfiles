@@ -7,5 +7,4 @@ After=xresources.service
 WantedBy=default.target
 
 [Service]
-Environment="DISPLAY=:0"
 ExecStart=/usr/bin/i3

@@ -2,7 +2,6 @@
 Description=offlineimap sync job
 
 [Service]
-Environment="DISPLAY=:0"
 Type=simple
 ExecStart=/usr/bin/offlineimap -a %i
 
