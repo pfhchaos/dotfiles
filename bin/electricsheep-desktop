@@ -4,7 +4,8 @@ rundir="/run/user/$(id -u)/esdesk"
 case $1 in
 start)
 	[ -d "$rundir" ] || mkdir "$rundir"
-	xrandr | grep " connected " | grep "$3" | while read output status geometry other; do
+	echo $2
+	xrandr | grep "$2 " | while read output connected geometry other; do
 		xwinwrap -ni -g "$geometry" -s -b -ov -- $0 env WID &> /dev/null
 	done
 ;;
