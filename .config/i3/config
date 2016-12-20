@@ -269,7 +269,6 @@ gaps inner 10
 
 
 for_window [class="qutebrowser"] title_format "qutebrowser | %title"
-
 for_window [class="FTL"] floating enable
 for_window [class="Wine"] floating enable
 for_window [class="mednafen"] floating enable
@@ -284,11 +283,6 @@ for_window [class="Rainlendar2"] floating enable
 for_window [class="Awesomenauts.bin.x86"] fullscreen
 for_window [class="Diablo III.exe"] fullscreen
 for_window [class="streaming_client"] fullscreen
-exec "xset -dpms"
+for_window [class="pinentry-gtk-2"] floating enable
 exec "xset s off"
-exec "skype"
-#exec "nm-applet"
-exec "compton -b"
-exec "xiccd"
-exec "urxvtd"
-exec "powerline-daemon"
+exec "xset -dpms"
