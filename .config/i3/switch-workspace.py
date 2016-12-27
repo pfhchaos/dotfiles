@@ -26,5 +26,8 @@ else:
     workspace = argv[1]
 
 i3.command('workspace' + workspace)
+for i in filter(lambda o: o.active, i3.get_workspaces()):
+    workspace = i.name
+
 i3.command('move workspace to output' + active_display)
 i3.command('workspace' + workspace)

@@ -103,10 +103,6 @@ bindsym XF86AudioLowerVolume exec pulseaudio-ctl down
 bindsym XF86AudioMute exec pulseaudio-ctl mute
 bindsym XF86MonBrightnessDown exec "xbacklight -dec 10"
 bindsym XF86MonBrightnessUp exec "xbacklight -inc 10"
-bindsym $mod+F7 exec pianoctl playpause
-bindsym $mod+F8 exec pianoctl skip
-bindsym $mod+F6 exec pianoctl thumbdown
-bindsym $mod+Shift+s exec pianoctl chstation
 
 # start a terminal
 bindsym $mod+Return exec termite
@@ -119,7 +115,6 @@ bindsym $mod+p exec rofi-pass
 bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec j4-dmenu-desktop --dmenu="rofi -dmenu"
-bindsym $mod+Tab exec rofi -now
 
 # change focus
 bindsym $mod+j focus left
@@ -138,8 +133,6 @@ bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
-bindsym $mod+Tilda scratchpad show
-bindsym $mod+Grave move scratchpad
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -172,8 +165,10 @@ bindsym $mod+a focus parent
 
 # focus the child container
 #bindcode $mod+d focus child
-#
+
 # switch to workspace
+bindsym $mod+grave exec --no-startup-id "$HOME/.config/i3/switch-workspace.py"
+bindsym $mod+Tab exec --no-startup-id "$HOME/.config/i3/switch-workspace.py next"
 bindsym $mod+1 exec --no-startup-id "$HOME/.config/i3/switch-workspace.py 1"
 bindsym $mod+2 exec --no-startup-id "$HOME/.config/i3/switch-workspace.py 2"
 bindsym $mod+3 exec --no-startup-id "$HOME/.config/i3/switch-workspace.py 3"
