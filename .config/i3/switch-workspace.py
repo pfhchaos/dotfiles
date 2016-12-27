@@ -1,26 +1,30 @@
-#!/usr/bin/env python
-
-from json import loads
-from os import popen
+#!/bin/env python
+import i3ipc
 from sys import argv
+from subprocess import Popen
+from subprocess import PIPE
 
-def ipc_query(req="command", msg=""):
-    ans = popen("i3-msg -t " + req + " " +  msg).readlines()[0]
-    return loads(ans)
+print(len(argv))
 
-if __name__ == "__main__":
-    # Usage & checking args
-    if len(argv) != 2:
-        print "Usage: switch-workspace.py name-of-workspace"
-        exit(-1)
+i3 = i3ipc.Connection()
 
-    newworkspace = argv[1]
+for i in filter(lambda o: o.active, i3.get_outputs()):
+    active_display = i.name
 
-    # Retrieving active display
-    active_display = None
-    for w in ipc_query(req="get_workspaces"):
-        if w['focused']:
-            active_display = w['output']
+if (len(argv) == 1):
 
-    # Moving workspace to active display
-    print ipc_query(msg="'workspace " + newworkspace + "; move workspace to output " + active_display + "; workspace " + newworkspace + "'")
+    workspace_list = ""
+
+    workspace = ""
+    for i in i3.get_workspaces():
+        workspace_list += i.name + "\n"
+    rofi = Popen('rofi -dmenu'.split(), stdin=PIPE, stdout=PIPE)
+    rofi.stdin.write(workspace_list)
+    rofi.stdin.close()
+    workspace = rofi.stdout.read()
+else:
+    workspace = argv[1]
+
+i3.command('workspace' + workspace)
+i3.command('move workspace to output' + active_display)
+i3.command('workspace' + workspace)
