@@ -1,0 +1,5 @@
+# to allow the sound to change sinks for games that use openalsoft and set the DONT_MOVE flag
+# Bleed and FEZ do this. I have no idea why
+
+[pulse]
+allow-moves=yes
