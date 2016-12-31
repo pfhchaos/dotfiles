@@ -7,5 +7,6 @@ export GTK2_RC_FILES="$HOME/.config/gtkrc-2.0"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
 export PATH="/home/chaos/bin:$PATH"
 export EDITOR="vim"
+export PYTHONPATH="$HOME/pythonpath/:$PYTHONPATH"
 alias emerge="sudo emerge"
 alias userctl="systemctl --user"
