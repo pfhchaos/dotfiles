@@ -1,2 +1,2 @@
 #!/bin/sh
-ssh -t pfhchaos@enterprise.whatbox.ca /home/pfhchaos/bin/rtorrent
+ssh -t pfhchaos@mariner.whatbox.ca /home/pfhchaos/bin/rtorrent
