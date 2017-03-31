@@ -5,7 +5,7 @@ case $1 in
 start)
 	[ -d "$rundir" ] || mkdir "$rundir"
 	echo $2
-	xrandr | grep "$2 " | while read output connected geometry other; do
+	xrandr | grep "$2 " | while read output connected primary geometry other; do
 		xwinwrap -ni -g "$geometry" -s -b -ov -- $0 env WID &> /dev/null
 	done
 ;;
