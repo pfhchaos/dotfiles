@@ -1,7 +1,7 @@
 [Unit]
 Description=Compton Compsiting Manager
-Requires=xorg.service
-After=xorg.service
+Requires=xorg.target
+After=xorg.target
 
 [Install]
 WantedBy=default.target

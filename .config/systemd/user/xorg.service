@@ -3,7 +3,6 @@ Description=Xorg
 Documentation=man:Xorg(1)
 Requires=xorg.socket
 After=xorg.socket
-# Add this line
 Before=xorg.target
 
 [Service]

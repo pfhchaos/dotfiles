@@ -2,6 +2,7 @@
 Description=i3 Window Manager
 Wants=xresources.service
 After=xresources.service
+After=xorg.target
 
 [Install]
 WantedBy=default.target

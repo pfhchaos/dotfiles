@@ -67,7 +67,7 @@
 *.color7:       COLOR07
 *.color15:      COLOR15
 
-*font: xft:Terminus
+*font: xft:xos4\ Terminus
 
 ! Rofi
 rofi.opacity: TRANSBACKDEC
@@ -193,7 +193,7 @@ URxvt.foreground: FOREGROUND
 URxvt.scrollBar: false
 URxvt.depth: 32
 URxvt.secondaryWheel: false
-URxvt.font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
+URxvt.font: xft:xos4\ Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
 
 ! Rofi
 rofi.opacity: TRANSBACKDEC

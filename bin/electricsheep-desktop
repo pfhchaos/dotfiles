@@ -5,9 +5,8 @@ case $1 in
 start)
 	[ -d "$rundir" ] || mkdir "$rundir"
 	echo $2
-	xrandr | grep "$2 " | while read output connected primary geometry other; do
-		xwinwrap -ni -g "$geometry" -s -b -ov -- $0 env WID &> /dev/null
-	done
+        geometry="$(xrandr | grep "$2 " | sed -e 's:.* \([0-9]*x[0-9]*+[0-9]*+[0-9]*\).*:\1:')"
+	xwinwrap -ni -g "$geometry" -s -b -ov -- $0 env WID &> /dev/null
 ;;
 env)
 	XSCREENSAVER_WINDOW="$2" electricsheep &> /dev/null

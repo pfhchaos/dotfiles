@@ -7,15 +7,10 @@ allow_bold = false
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
-font = Terminus 9
-#font = Unifont
-#font = Unifont Upper
 scrollback_lines = 10000
 search_wrap = true
-#icon_name = terminal
-#geometry = 640x480
+font = xos4 Terminus 8
 
-# "system", "on" or "off"
 cursor_blink = system
 
 # "block", "underline" or "ibeam"

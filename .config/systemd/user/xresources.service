@@ -3,6 +3,7 @@
 Description=X resource loader
 Requires=xorg.service
 After=xorg.service
+Before=xorg.target
 
 [Service]
 Type=oneshot
