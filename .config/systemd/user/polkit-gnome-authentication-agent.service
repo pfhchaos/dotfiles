@@ -1,9 +1,9 @@
 
 [Unit]
 Description=Gnome Polkit Authenticator
-Requires=xorg.service
-Wants=xresources.service
-After=xorg.service xresources.service
+Requires=xorg.target
+Wants=xorg.target
+After=xorg.target
 
 [Install]
 WantedBy=default.target

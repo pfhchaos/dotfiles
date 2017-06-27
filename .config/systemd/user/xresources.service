@@ -10,3 +10,5 @@ Type=oneshot
 RemainAfterExit=true
 ExecStart=/usr/bin/xrdb -load .Xresources
 
+[Install]
+WantedBy=xorg.target

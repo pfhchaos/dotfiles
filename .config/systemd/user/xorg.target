@@ -1,0 +1,5 @@
+[Unit]
+Description=Xorg Server
+Wants=xorg.service
+After=xorg.service
+After=display-setup.service
