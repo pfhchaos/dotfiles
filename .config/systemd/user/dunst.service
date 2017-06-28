@@ -1,0 +1,10 @@
+[Unit]
+Description=Notification Daemon
+Requires=xorg.service
+After=xorg.service
+
+[Install]
+WantedBy=default.target
+
+[Service]
+ExecStart=/usr/bin/dunst
