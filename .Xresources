@@ -198,7 +198,7 @@ URxvt.font: xft:xos4\ Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixe
 ! Rofi
 rofi.opacity: TRANSBACKDEC
 rofi.color-window: BACKGROUND,BACKGROUNDALT,BACKGROUNDALT
-rofi.color-normal: BACKGROUND,FOREGROUND,BACKGROUND,HILIGHT,FOREGROUND
+rofi.color-normal: BACKGROUND,FOREGROUND,BACKGROUND,HIGHLIGHT,FOREGROUND
 rofi.width: 50
 rofi.lines: 5
 rofi.columns: 1
