@@ -1,15 +1,13 @@
-#!/bin/env python
+#!/bin/env python3
 import i3ipc
 from sys import argv
 from subprocess import Popen
 from subprocess import PIPE
 
-print(len(argv))
-
 i3 = i3ipc.Connection()
 
-for i in filter(lambda o: o.active, i3.get_outputs()):
-    active_display = i.name
+for i in list(filter(lambda o: o.focused, i3.get_workspaces())):
+    active_display = i.output
 
 if (len(argv) == 1):
 
@@ -26,7 +24,7 @@ else:
     workspace = argv[1]
 
 i3.command('workspace' + workspace)
-for i in filter(lambda o: o.active, i3.get_workspaces()):
+for i in list(filter(lambda o: o.focused, i3.get_workspaces())):
     workspace = i.name
 
 i3.command('move workspace to output' + active_display)
