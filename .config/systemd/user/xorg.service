@@ -7,7 +7,7 @@ Before=xorg.target
 
 [Service]
 ExecStart=/usr/bin/Xorg $DISPLAY -nolisten tcp -noreset -verbose 1 vt1
-ExecStartPost=/usr/bin/systemctl --user set-environment DISPLAY=:0
+ExecStartPost=/bin/systemctl --user set-environment DISPLAY=:0
 SuccessExitStatus=0 1
 
 [Install]
