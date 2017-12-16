@@ -48,3 +48,5 @@ zstyle ':completion::complete:*' use-cache 1
 alias ls='ls --color=auto'
 unsetopt EQUALS
 #source /usr/share/zsh/site-contrib/powerline.zsh
+
+stty -ixon
