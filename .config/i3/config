@@ -280,4 +280,3 @@ for_window [class="streaming_client"] fullscreen
 for_window [class="pinentry-gtk-2"] floating enable
 exec "xset s off"
 exec "xset -dpms"
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
