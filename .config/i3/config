@@ -114,7 +114,7 @@ bindsym $mod+p exec rofi-pass
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+d exec j4-dmenu-desktop --dmenu="rofi -dmenu"
+bindsym $mod+d exec "rofi -show run -modi run,window -show-icons -sidebar-mode -terminal termite"
 
 # change focus
 bindsym $mod+j focus left
@@ -231,27 +231,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-## Plasma Integration
-# Try to kill the wallpaper set by Plasma (it takes up the entire workspace and hides everythiing)
-
-exec --no-startup-id wmctrl -c Plasma
-for_window [title="Desktop — Plasma"] kill; floating enable; border none
-
-
-
-## Avoid tiling popups, dropdown windows from plasma
-# for the first time, manually resize them, i3 will remember the setting for floating windows
-
-for_window [class="plasmashell"] floating enable;
-for_window [class="Plasma"] floating enable; border none
-for_window [title="plasma-desktop"] floating enable; border none
-for_window [title="win7"] floating enable; border none
-for_window [class="krunner"] floating enable; border none
-for_window [class="Kmix"] floating enable; border none
-for_window [class="Klipper"] floating enable; border none
-for_window [class="Plasmoidviewer"] floating enable; border none
-
-
 # Border sizes
 new_window none # normal x | 1pixel | none | pixel x
 new_float normal 1 
@@ -260,6 +239,9 @@ new_float normal 1
 hide_edge_borders both # none | vertical | horizontal | both
 
 gaps inner 10
+
+# assign looking glass to workspace 1
+assign [class="^looking-glass-client$"] 1
 
 
 for_window [class="qutebrowser"] title_format "qutebrowser | %title"
