@@ -2,7 +2,7 @@
 set directory=$XDG_CACHE_HOME/vim,~/,/tmp
 set backupdir=$XDG_CACHE_HOME/vim,~/,/tmp
 set viminfo+=n$XDG_CACHE_HOME/vim/viminfo
-set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
+set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,/usr/share/vim/vimfiles,$VIM,$VIMRUNTIME
 let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc"
 
 " UI settings
@@ -19,9 +19,6 @@ set smarttab
 set expandtab
 set softtabstop=0
 set tabstop=8
-
-" Pathogen 
-execute pathogen#infect()
 
 " Synastic
 set statusline+=%#warningmsg#
