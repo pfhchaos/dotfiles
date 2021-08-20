@@ -1,12 +1,39 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
-export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 export SYSTEMD_PAGER="cat"
 export GTK2_RC_FILES="$HOME/.config/gtkrc-2.0"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
 export PATH="/home/chaos/bin:$PATH:/usr/local/games/bin:/usr/games/bin"
-export EDITOR="vim"
+export TERMINAL="alacritty"
+export EDITOR="nvim"
+export VISUAL="nvim"
 export PYTHONPATH="$HOME/pythonpath/:$PYTHONPATH"
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+export NEWT_COLORS="
+           root=color15,color0
+         border=color15,color0
+         window=color15,color0
+         shadow=color15,color0
+          title=color13,color0
+         button=color15,color0
+      actbutton=color13,color0
+       checkbox=color15,color0
+    actcheckbox=color13,color0
+          entry=color12,color0
+          label=color11,color0
+        listbox=color15,color0
+     actlistbox=color10,color0
+        textbox=color15,color0
+     acttextbox=color15,color0
+       helpline=color15,color0
+       roottext=color15,color0
+     emptyscale=color15,color0
+      fullscale=color15,color0
+       disentry=color15,color0
+  compactbutton=color15,color0
+  actsellistbox=color15,color0
+     sellistbox=color15,color0
+"
 alias emerge="sudo emerge"
 alias userctl="systemctl --user"
