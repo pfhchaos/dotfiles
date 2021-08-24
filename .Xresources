@@ -31,44 +31,43 @@
 
 #define A TRANSDEC(CAT(0x,TRANS))
 ! special
-*.foreground:   FOREGROUND
-*.background:   BACKGROUND
-*.cursorColor:  COLOR07
+!*.foreground:   FOREGROUND
+!*.background:   BACKGROUND
+!*.cursorColor:  COLOR07
 
 ! black
-*.color0:       COLOR00
-*.color8:       COLOR08
+!*.color0:       COLOR00
+!*.color8:       COLOR08
 
 ! red
-*.color1:       COLOR01
-*.color9:       COLOR09
+!*.color1:       COLOR01
+!*.color9:       COLOR09
 
 ! green
-*.color2:       COLOR02
-*.color10:      COLOR10
+!*.color2:       COLOR02
+!*.color10:      COLOR10
 
 ! yellow
-*.color3:       COLOR03
-*.color11:      COLOR11
+!*.color3:       COLOR03
+!*.color11:      COLOR11
 
 ! blue
-*.color4:       COLOR04
-*.color12:      COLOR12
+!*.color4:       COLOR04
+!*.color12:      COLOR12
 
 ! magenta
-*.color5:       COLOR05
-*.color13:      COLOR13
+!*.color5:       COLOR05
+!*.color13:      COLOR13
 
 ! cyan
-*.color6:       COLOR06
-*.color14:      COLOR14
+!*.color6:       COLOR06
+!*.color14:      COLOR14
 
 ! white
-*.color7:       COLOR07
-*.color15:      COLOR15
+!*.color7:       COLOR07
+!*.color15:      COLOR15
 
-*font: xft:xos4\ Terminus
-
+!*font: xft:xos4\ Terminus
 ! i3 settings
 
 i3wm.background: CAT(BACKGROUND,TRANS)
@@ -258,3 +257,10 @@ i3bar.workspace.urgent.text: 		COLOR09
 i3bar.bindingMode.border: 		CAT(COLOR09,TRANS)
 i3bar.bindingMode.background: 		CAT(COLOR09,TRANS)
 i3bar.bindingMode.text: 		FOREGROUND
+
+
+! xspim
+Xspim*background:       #FFFFFF
+Xspim*foreground:       #000000
+
+

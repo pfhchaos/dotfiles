@@ -1,4 +1,31 @@
-set default-bg rgba(0,0,0,0.7)
+set default-bg rgba(40,44,52,0.7)
 set recolor true
-set recolor-lightcolor rgba(0,0,0,0)
-set recolor-darkcolor rgba(255,255,255,1)
+set recolor-darkcolor rgba(171,178,191,1)
+set recolor-lightcolor rgba(40,44,52,0)
+
+set highlight-color rgba(198,120,221,0)
+set highlight-active-color rgba(198,120,221,1)
+#set highlight-transparency 0.7
+
+set completion-bg rgba(40,44,52,1)
+set completion-fg rgba(171,178,191,1)
+#set completion-group-bg
+#set completion-group-fg
+set completion-highlight-bg rgba(40,44,52,1)
+set completion-highlight-fg rgba(198,120,221,1)
+#set default-fg
+#set default-bg
+#set font monospace normal 9
+set inputbar-bg rgba(40,44,52,1)
+set inputbar-fg rgba(171,178,191,1)
+set notification-error-bg rgba(224,108,117,1)
+set notification-error-fg rgba(40,44,52,1)
+set notification-warning-bg rgba(229,192,123,1)
+set notification-warning-fg rgba(40,44,52,1)
+#set tabbar-fg 
+#set tabbar-bg
+#set tabbar-focus-fg
+#set tabbar-focus-bg
+set statusbar-bg rgba(40,44,52,1)
+set statusbar-fg rgba(171,178,191,1)
+
