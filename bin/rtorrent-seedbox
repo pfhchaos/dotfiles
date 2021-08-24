@@ -1,2 +1,3 @@
 #!/bin/sh
-ssc pfhchaos@mariner.whatbox.ca rTorrent
+sttyy -ixon
+ssc pfhchaos@mneme.whatbox.ca rTorrent
