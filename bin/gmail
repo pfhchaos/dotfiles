@@ -1,0 +1,3 @@
+#!/bin/sh
+
+QT_QPA_PLATFORM=wayland google-chrome-stable --app=https://mail.google.com/mail/u/0/#inbox --class=$0
