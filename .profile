@@ -6,7 +6,7 @@ export XDG_CURRENT_DESKTOP="sway"
 export XDG_SESSION_TYPE="wayland"
 export GTK2_RC_FILES="$HOME/.config/gtkrc-2.0"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
-export PATH="/home/chaos/bin:/home/chaos/.cargo/bin:$PATH:/usr/local/games/bin:/usr/games/bin:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
+export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH:/usr/local/games/bin:/usr/games/bin:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
 export TERMINAL="alacritty"
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -37,6 +37,9 @@ export NEWT_COLORS="
   actsellistbox=color13,color0
      sellistbox=color15,default
 "
+export PICO_SDK_PATH="/usr/local/pico-sdk"
+export QT_STYLE_OVERRIDE="adwaita"
+
 alias emerge="sudo emerge"
 alias userctl="systemctl --user"
 alias ssh='TERM=xterm-color ssh'

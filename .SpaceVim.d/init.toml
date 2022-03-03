@@ -39,6 +39,8 @@ default_height = 30
 
 [[layers]]
 name = "lang#c"
+enable_clang_syntax_highlight = true
+
 
 [[layers]]
 name = "lang#java"

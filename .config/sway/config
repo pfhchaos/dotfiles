@@ -16,7 +16,7 @@ include display.conf
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
-font "xft:xos4 Terminus 10"
+font "pango:Terminus 10"
 #font pango:DejaVu Sans Mono 0
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, if you need a lot of unicode glyphs or
@@ -24,219 +24,220 @@ font "xft:xos4 Terminus 10"
 # chose an xft font, such as:
 # font xft:DejaVu Sans Mono 10
 
+input "type:keyboard" {
+  xkb_numlock enable
+  xkb_options "caps:none"
+  xkb_options "numpad:mac"
+}
+
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# multimedia keys
 bindsym {
-  XF86AudioRaiseVolume exec pulseaudio-ctl up
-  XF86AudioLowerVolume exec pulseaudio-ctl down
-  XF86AudioMute exec pulseaudio-ctl mute
+  # multimedia keys
+  XF86AudioRaiseVolume        exec "pulseaudio-ctl up"
+  XF86AudioLowerVolume        exec "pulseaudio-ctl down"
+  XF86AudioMute               exec "pulseaudio-ctl mute"
+
+  XF86AudioPlay               exec "$HOME/.config/pianobar/control-pianobar p"
+  XF86AudioStop               exec "$HOME/.config/pianobar/control-pianobar quit"
+  XF86AudioPrev               exec "$HOME/.config/pianobar/control-pianobar history"
+  XF86AudioNext               exec "$HOME/.config/pianobar/control-pianobar next"
+  Shift+XF86AudioPrev         exec "$HOME/.config/pianobar/control-pianobar previousstation"
+  Shift+XF86AudioNext         exec "$HOME/.config/pianobar/control-pianobar nextstation"
+
+
+
   XF86MonBrightnessDown exec "xbacklight -dec 10"
-  XF86MonBrightnessUp exec "xbacklight -inc 10"
+  XF86MonBrightnessUp   exec "xbacklight -inc 10"
+
+  # screenshots
+  $mod+Print            exec "grimshot copy win"
+  $mod+Shift+Print      exec "grimshot save win"
+
+  $mod+Alt+Print        exec "grimshot copy area"
+  $mod+Alt+Shift+Print  exec "grimshot save area"
+
+  # start a terminal
+  $mod+Return           exec "alacritty"
+  $mod+Shift+Return     exec "$HOME/.config/sway/scripts/remoteterm"
+  $mod+g                exec "systemd-cat --identifier=qutebrowser /usr/bin/qutebrowser"
+  $mod+Shift+g          exec "$HOME/.config/sway/scripts/browsermenu"
+
+  # kill focused window
+  $mod+Shift+q          kill
+
+  #run dialog
+  $mod+d                exec "j4-dmenu-desktop --dmenu='wofi -d' --term='alacritty'"
+
+  # change focus
+  $mod+j                focus left
+  $mod+k                focus down
+  $mod+l                focus up
+  $mod+semicolon        focus right
+
+  # alternatively, you can use the cursor keys:
+  $mod+Left             focus left
+  $mod+Down             focus down
+  $mod+Up               focus up
+  $mod+Right            focus right
+
+  # move focused window
+  $mod+Shift+j          move left
+  $mod+Shift+k          move down
+  $mod+Shift+l          move up
+  $mod+Shift+semicolon  move right
+
+  # alternatively, you can use the cursor keys:
+  $mod+Shift+Left       move left
+  $mod+Shift+Down       move down
+  $mod+Shift+Up         move up
+  $mod+Shift+Right      move right
+
+  # split in horizontal orientation
+  $mod+h                split h
+
+  # split in vertical orientation
+  $mod+v                split v
+
+  # enter fullscreen mode for the focused container
+  $mod+f                fullscreen
+
+  # change container layout (stacked, tabbed, toggle split)
+  $mod+s                layout stacking
+  $mod+w                layout tabbed
+  $mod+e                layout toggle split
+
+  # toggle tiling / floating
+  $mod+Shift+space      floating toggle
+
+  # change focus between tiling / floating windows
+  $mod+space            focus mode_toggle
+
+  # focus the parent container
+  $mod+a                focus parent
+
+  # focus the child container
+  #$mod+d               focus child
+
+  # switch to workspace
+  $mod+1                workspace 1
+  $mod+2                workspace 2
+  $mod+3                workspace 3
+  $mod+4                workspace 4
+  $mod+5                workspace 5
+  $mod+6                workspace 6
+  $mod+7                workspace 7
+  $mod+8                workspace 8
+  $mod+9                workspace 9
+  $mod+0                workspace 10
+
+  # move focused container to workspace
+  $mod+Shift+1          move container to workspace 1
+  $mod+Shift+2          move container to workspace 2
+  $mod+Shift+3          move container to workspace 3
+  $mod+Shift+4          move container to workspace 4
+  $mod+Shift+5          move container to workspace 5
+  $mod+Shift+6          move container to workspace 6
+  $mod+Shift+7          move container to workspace 7
+  $mod+Shift+8          move container to workspace 8
+  $mod+Shift+9          move container to workspace 9
+  $mod+Shift+0          move container to workspace 10
+
+  # reload the configuration file
+  $mod+Shift+c          reload
+  # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+  $mod+Shift+r          restart
+  # exit i3 (logs you out of your X session)
+  $mod+Shift+e          exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 }
 
-# screenshots
-bindsym {
-  $mod+Print exec "grimshot copy win"
-  $mod+Shift+Print "grimshot save win"
-
-  $mod+Alt+Print exec "grimshot copy area"
-  $mod+Alt+Shift+Print "grimshot save area"
+# control pianobar
+bindsym $mod+p          mode "pianobar"
+mode "pianobar" bindsym {
+  $mod+p           exec "$HOME/.config/pianobar/control-pianobar p"
+  $mod+q           exec "$HOME/.config/pianobar/control-pianobar quit"
+  $mod+h           exec "$HOME/.config/pianobar/control-pianobar history"
+  $mod+n           exec "$HOME/.config/pianobar/control-pianobar next"
+  $mod+Left        exec "$HOME/.config/pianobar/control-pianobar previousstation"
+  $mod+j           exec "$HOME/.config/pianobar/control-pianobar previousstation"
+  $mod+Right       exec "$HOME/.config/pianobar/control-pianobar nextstation"
+  $mod+semicolon   exec "$HOME/.config/pianobar/control-pianobar nextstation"
+  $mod+plus        exec "$HOME/.config/pianobar/control-pianobar love"
+  $mod+KP_Add      exec "$HOME/.config/pianobar/control-pianobar love"
+  $mod+minus       exec "$HOME/.config/pianobar/control-pianobar ban"
+  $mod+KP_Subtract exec "$HOME/.config/pianobar/control-pianobar ban"
+  $mod+question    exec "$HOME/.config/pianobar/control-pianobar explain"
+  $mod+s           exec "$HOME/.config/pianobar/control-pianobar switchstation"
+  $mod+d           exec "$HOME/.config/pianobar/control-pianobar download"
+  $mod+Return mode "default"
+  $mod+Escape mode "default"
 }
-
-# start a terminal
-bindsym {
-  $mod+Return exec "alacritty"
-  $mod+Shift+Return exec "$HOME/.config/sway/scripts/remoteterm"
-  $mod+g exec "systemd-cat --identifier=qutebrowser /usr/bin/qutebrowser"
-  $mod+Shift+g exec "$HOME/.config/sway/scripts/browsermenu"
-}
-
-# kill focused window
-bindsym $mod+Shift+q kill
-
-#run dialog
-bindsym $mod+d exec "wofi -S run -p run:"
-
-# change focus
-bindsym {
-  $mod+j focus left
-  $mod+k focus down
-  $mod+l focus up
-  $mod+semicolon focus right
-}
-
-# alternatively, you can use the cursor keys:
-bindsym {
-  $mod+Left  focus left
-  $mod+Down focus down
-  $mod+Up focus up
-  $mod+Right focus right
-}
-
-# move focused window
-bindsym {
-  $mod+Shift+j move left
-  $mod+Shift+k move down
-  $mod+Shift+l move up
-  $mod+Shift+semicolon move right
-}
-
-# alternatively, you can use the cursor keys:
-bindsym {
-  $mod+Shift+Left move left
-  $mod+Shift+Down move down
-  $mod+Shift+Up move up
-  $mod+Shift+Right move right
-}
-
-# split in horizontal orientation
-bindsym $mod+h split h
-
-# split in vertical orientation
-bindsym $mod+v split v
-
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
-# toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# focus the child container
-#bindcode $mod+d focus child
-
-# switch to workspace
-bindsym {
-  $mod+grave exec --no-startup-id "$HOME/.config/i3/switch-workspace.py"
-  $mod+Tab exec --no-startup-id "$HOME/.config/i3/switch-workspace.py next"
-  $mod+1 workspace 1
-  $mod+2 workspace 2
-  $mod+3 workspace 3
-  $mod+4 workspace 4
-  $mod+5 workspace 5
-  $mod+6 workspace 6
-  $mod+7 workspace 7
-  $mod+8 workspace 8
-  $mod+9 workspace 9
-  $mod+0 workspace 10
-}
-
-# move focused container to workspace
-bindsym {
-  $mod+Shift+1 move container to workspace 1
-  $mod+Shift+2 move container to workspace 2
-  $mod+Shift+3 move container to workspace 3
-  $mod+Shift+4 move container to workspace 4
-  $mod+Shift+5 move container to workspace 5
-  $mod+Shift+6 move container to workspace 6
-  $mod+Shift+7 move container to workspace 7
-  $mod+Shift+8 move container to workspace 8
-  $mod+Shift+9 move container to workspace 9
-  $mod+Shift+0 move container to workspace 10
-}
-
-# reload the configuration file
-bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+bindsym $mod+r          mode "resize"
+mode "resize" bindsym {
+  # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j         resize shrink width  10 px or 10 ppt
-        bindsym k         resize grow   height 10 px or 10 ppt
-        bindsym l         resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow   width  10 px or 10 ppt
+  # Pressing left will shrink the window’s width.
+  # Pressing right will grow the window’s width.
+  # Pressing up will shrink the window’s height.
+  # Pressing down will grow the window’s height.
+  $mod+j         resize shrink width  10 px or 10 ppt
+  $mod+k         resize grow   height 10 px or 10 ppt
+  $mod+l         resize shrink height 10 px or 10 ppt
+  $mod+semicolon resize grow   width  10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left  resize shrink width  10 px or 10 ppt
-        bindsym Down  resize grow   height 10 px or 10 ppt
-        bindsym Up    resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow   width  10 px or 10 ppt
+  # same bindings, but for the arrow keys
+  $mod+Left  resize shrink width  10 px or 10 ppt
+  $mod+Down  resize grow   height 10 px or 10 ppt
+  $mod+Up    resize shrink height 10 px or 10 ppt
+  $mod+Right resize grow   width  10 px or 10 ppt
 
-	# Fine adjustments
-	bindsym Shift+Left  resize shrink width  1 px or 1 ppt
-        bindsym Shift+Down  resize grow   height 1 px or 1 ppt
-        bindsym Shift+Up    resize shrink height 1 px or 1 ppt
-        bindsym Shift+Right resize grow   width  1 px or 1 ppt
+  # Fine adjustments
+  $mod+Shift+Left  resize shrink width  1 px or 1 ppt
+  $mod+Shift+Down  resize grow   height 1 px or 1 ppt
+  $mod+Shift+Up    resize shrink height 1 px or 1 ppt
+  $mod+Shift+Right resize grow   width  1 px or 1 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+  # back to normal: Enter or Escape
+  $mod+Return mode "default"
+  $mod+Escape mode "default"
 }
 
 bar {
 }
 
-bindsym $mod+r mode "resize"
-
-# Border sizes
-default_border normal 1
-smart_borders no_gaps
-default_floating_border normal 1 # normal x | 1pixel | none | pixel x
-
-hide_edge_borders both # none | vertical | horizontal | both
-
-gaps inner 10
-
-workspace "1" output DP-3
-workspace "2" output DP-3
-workspace "3" output DP-3
-workspace "4" output DP-3
-workspace "5" output DP-3
-workspace "6" output DP-3
-workspace "7" output DP-3
-workspace "8" output DP-3
-workspace "9" output DP-3
-workspace "10" output DP-3
-workspace "comms" output DP-1
-workspace "12: Right" output DP-2
-
-
 # assign looking glass to workspace 1
 #assign [class="^looking-glass-client$"] 1
 
-for_window [class="^looking-glass-client$"] fullscreen
-for_window [class="qutebrowser"] title_format "qutebrowser | %title"
-for_window [class="FTL"] floating enable
-for_window [class="Wine"] floating enable
-for_window [class="mednafen"] floating enable
-for_window [class="DungeonDefenders-x86"] floating enable
-for_window [class="Closure"] floating enable
-for_window [class="xbmc.bin"] floating enable
-for_window [class="mupen64plus"] floating enable
-for_window [class="Empathy"] floating enable
-# for_window [name="Zigfrak"] floating enable 
-for_window [class="MPlayer"] fullscreen
-for_window [class="Rainlendar2"] floating enable
-for_window [class="Awesomenauts.bin.x86"] fullscreen
-for_window [class="Diablo III.exe"] fullscreen
-for_window [class="streaming_client"] fullscreen
-for_window [class="pinentry-gtk-2"] floating enable
-for_window [class="t-engine64"] floating enable
+for_window {
+  [class="^looking-glass-client$"] fullscreen
+  [class="qutebrowser"] title_format "qutebrowser | %title"
+  [class="FTL"] floating enable
+  [class="Wine"] floating enable
+  [class="mednafen"] floating enable
+  [class="DungeonDefenders-x86"] floating enable
+  [class="Closure"] floating enable
+  [class="xbmc.bin"] floating enable
+  [class="mupen64plus"] floating enable
+  [class="Empathy"] floating enable
+# [name="Zigfrak"] floating enable 
+  [class="MPlayer"] fullscreen
+  [class="Rainlendar2"] floating enable
+  [class="Awesomenauts.bin.x86"] fullscreen
+  [class="Diablo III.exe"] fullscreen
+  [class="streaming_client"] fullscreen
+  [class="pinentry-gtk-2"] floating enable
+  [class="t-engine64"] floating enable
+}
 
 exec "xset s off"
 exec "xset -dpms"
 exec "discord"
+exec "$HOME/.config/pianobar/pianobar-bg"
 exec "mako &"
+exec "swaycons &"
 
 
