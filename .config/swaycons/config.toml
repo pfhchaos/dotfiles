@@ -1,0 +1,7 @@
+[global]
+icon = ""
+color = "#abb2bf"
+focused_color = "#abb2bf"
+
+[app_id]
+qutebrowser = { icon = "" }
