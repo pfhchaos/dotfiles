@@ -12,6 +12,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export PYTHONPATH="$HOME/pythonpath/:$PYTHONPATH"
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+export PICO_SDK_PATH="/usr/local/pico-sdk"
 export NEWT_COLORS="
            root=color15,default
          border=color15,default

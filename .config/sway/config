@@ -30,7 +30,6 @@ input "type:keyboard" {
   xkb_options "numpad:mac"
 }
 
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -207,6 +206,7 @@ mode "resize" bindsym {
 }
 
 bar {
+  swaybar_command waybar
 }
 
 # assign looking glass to workspace 1

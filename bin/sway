@@ -4,4 +4,4 @@
 export QT_QPA_PLATFORM="wayland"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-systemd-cat --identifier=sway dbus-run-session /usr/bin/sway
+systemd-cat --identifier=sway dbus-run-session /usr/bin/sway &> .sway.log 
