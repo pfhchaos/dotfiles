@@ -155,23 +155,24 @@ bindsym {
 # control pianobar
 bindsym $mod+p          mode "pianobar"
 mode "pianobar" bindsym {
-  $mod+p           exec "$HOME/.config/pianobar/control-pianobar p"
-  $mod+q           exec "$HOME/.config/pianobar/control-pianobar quit"
-  $mod+h           exec "$HOME/.config/pianobar/control-pianobar history"
-  $mod+n           exec "$HOME/.config/pianobar/control-pianobar next"
-  $mod+Left        exec "$HOME/.config/pianobar/control-pianobar previousstation"
-  $mod+j           exec "$HOME/.config/pianobar/control-pianobar previousstation"
-  $mod+Right       exec "$HOME/.config/pianobar/control-pianobar nextstation"
-  $mod+semicolon   exec "$HOME/.config/pianobar/control-pianobar nextstation"
-  $mod+plus        exec "$HOME/.config/pianobar/control-pianobar love"
-  $mod+KP_Add      exec "$HOME/.config/pianobar/control-pianobar love"
-  $mod+minus       exec "$HOME/.config/pianobar/control-pianobar ban"
-  $mod+KP_Subtract exec "$HOME/.config/pianobar/control-pianobar ban"
-  $mod+question    exec "$HOME/.config/pianobar/control-pianobar explain"
-  $mod+s           exec "$HOME/.config/pianobar/control-pianobar switchstation"
-  $mod+d           exec "$HOME/.config/pianobar/control-pianobar download"
-  $mod+Return mode "default"
-  $mod+Escape mode "default"
+  p                     exec "$HOME/.config/pianobar/control-pianobar.sh p"; mode "default"
+  q                     exec "$HOME/.config/pianobar/control-pianobar.sh quit"; mode "default"
+  h                     exec "$HOME/.config/pianobar/control-pianobar.sh history"; mode "default"
+  n                     exec "$HOME/.config/pianobar/control-pianobar.sh next"; mode "default"
+  Left                  exec "$HOME/.config/pianobar/control-pianobar.sh previousstation"; mode "default"
+  j                     exec "$HOME/.config/pianobar/control-pianobar.sh previousstation"; mode "default"
+  Right                 exec "$HOME/.config/pianobar/control-pianobar.sh nextstation"; mode "default"
+  semicolon             exec "$HOME/.config/pianobar/control-pianobar.sh nextstation"; mode "default"
+  plus                  exec "$HOME/.config/pianobar/control-pianobar.sh love"; mode "default"
+  KP_Add                exec "$HOME/.config/pianobar/control-pianobar.sh love"; mode "default"
+  minus                 exec "$HOME/.config/pianobar/control-pianobar.sh ban"; mode "default"
+  KP_Subtract           exec "$HOME/.config/pianobar/control-pianobar.sh ban"; mode "default"
+  question              exec "$HOME/.config/pianobar/control-pianobar.sh current"; mode "default"
+  Shift+question        exec "$HOME/.config/pianobar/control-pianobar.sh explain"; mode "default"
+  s                     exec "$HOME/.config/pianobar/control-pianobar.sh switchstation"; mode "default"
+  d                     exec "$HOME/.config/pianobar/control-pianobar.sh download"; mode "default"
+  Return                mode "default"
+  Escape                mode "default"
 }
 
 # resize window (you can also use the mouse for that)
@@ -201,12 +202,11 @@ mode "resize" bindsym {
   $mod+Shift+Right resize grow   width  1 px or 1 ppt
 
   # back to normal: Enter or Escape
-  $mod+Return mode "default"
-  $mod+Escape mode "default"
+  Return mode "default"
+  Escape mode "default"
 }
 
 bar {
-  swaybar_command waybar
 }
 
 # assign looking glass to workspace 1
