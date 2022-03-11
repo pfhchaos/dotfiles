@@ -1,0 +1,29 @@
+#!/bin/env python3
+
+import i3ipc
+from Rofi import Rofi
+
+rofi = Rofi()
+i3 = i3ipc.Connection()
+
+#print(rofi.error("error message"))
+#print(rofi.status("status message "))
+#print(rofi.select("test select: ", ["opt1","opt2"], "select message"))
+#print(rofi.text_entry("text: ", "text message"))
+#print(rofi.integer_entry("int: ", "int message"))
+#print(rofi.float_entry("float: ","float message"))
+#print(rofi.decimal_entry("decimal: ", "decimal message"))
+
+command = []
+command.append("termite")
+
+host = rofi.select("host",["PortableChaos","ChaosBeast","Seedbox"])
+
+if (host[0] == 0): 
+    pass
+if (host[0] == 1):
+    command = command + ["-e", "ssh paradoxzone.ddns.net"]
+if (host[0] == 2):
+    command = command + ["-e", "ssh pfhchaos@enterprise.ddns.net"]
+
+i3.command("exec" + " ".join("'{0}'".format(x) for x in command))
