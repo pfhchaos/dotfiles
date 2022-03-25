@@ -24,8 +24,8 @@
     enable_tabline_filetype_icon = true
     enable_statusline_mode = false
 
-    bootstrap_before = "transparent_bg#before"
-    bootstrap_before = "wordwrap#after"
+    bootstrap_before = "bootstrap#before"
+    bootstrap_after = "bootstrap#after"
 
 # Enable autocomplete layer
 [[layers]]
