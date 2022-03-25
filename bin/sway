@@ -3,5 +3,7 @@
 #wayland environt vars
 export QT_QPA_PLATFORM="wayland"
 export _JAVA_AWT_WM_NONREPARENTING=1
+export WLR_DRM_NO_MODIFIERS=1
 
-systemd-cat --identifier=sway dbus-run-session /usr/bin/sway &> .sway.log 
+#systemd-cat --identifier=sway dbus-run-session /usr/bin/sway
+/usr/bin/sway

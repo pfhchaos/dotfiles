@@ -51,13 +51,6 @@ bindsym {
   XF86MonBrightnessDown exec "xbacklight -dec 10"
   XF86MonBrightnessUp   exec "xbacklight -inc 10"
 
-  # screenshots
-  $mod+Print            exec "grimshot copy win"
-  $mod+Shift+Print      exec "grimshot save win"
-
-  $mod+Alt+Print        exec "grimshot copy area"
-  $mod+Alt+Shift+Print  exec "grimshot save area"
-
   # start a terminal
   $mod+Return           exec "alacritty"
   $mod+Shift+Return     exec "$HOME/.config/sway/scripts/remoteterm"
@@ -167,7 +160,7 @@ mode "pianobar" bindsym {
   KP_Add                exec "$HOME/.config/pianobar/control-pianobar.sh love"; mode "default"
   minus                 exec "$HOME/.config/pianobar/control-pianobar.sh ban"; mode "default"
   KP_Subtract           exec "$HOME/.config/pianobar/control-pianobar.sh ban"; mode "default"
-  question              exec "$HOME/.config/pianobar/control-pianobar.sh current"; mode "default"
+  slash                 exec "$HOME/.config/pianobar/control-pianobar.sh current"; mode "default"
   Shift+question        exec "$HOME/.config/pianobar/control-pianobar.sh explain"; mode "default"
   s                     exec "$HOME/.config/pianobar/control-pianobar.sh switchstation"; mode "default"
   d                     exec "$HOME/.config/pianobar/control-pianobar.sh download"; mode "default"
@@ -202,6 +195,30 @@ mode "resize" bindsym {
   $mod+Shift+Right resize grow   width  1 px or 1 ppt
 
   # back to normal: Enter or Escape
+  Return mode "default"
+  Escape mode "default"
+}
+
+bindsym $mod+Print          mode "screenshot-save"
+mode "screenshot-save" bindsym {
+  d exec "grimshot --notify save screen"; mode "default"
+  m exec "grimshot --notify save output"; mode "default"
+  w exec "grimshot --notify save active"; mode "default"
+  a exec "grimshot --notify save area"; mode "default"
+  s exec "grimshot --notify save window"; mode "default"
+
+  Return mode "default"
+  Escape mode "default"
+}
+
+bindsym $mod+Shift+Print          mode "screenshot-copy"
+mode "screenshot-copy" bindsym {
+  d exec "grimshot --notify copy screen"; mode "default"
+  m exec "grimshot --notify copy output"; mode "default"
+  w exec "grimshot --notify copy active"; mode "default"
+  a exec "grimshot --notify copy area"; mode "default"
+  s exec "grimshot --notify copy window"; mode "default"
+
   Return mode "default"
   Escape mode "default"
 }

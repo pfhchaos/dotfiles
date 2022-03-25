@@ -25,6 +25,7 @@
     enable_statusline_mode = false
 
     bootstrap_before = "transparent_bg#before"
+    bootstrap_before = "wordwrap#after"
 
 # Enable autocomplete layer
 [[layers]]
@@ -61,3 +62,5 @@ name = "lang#javascript"
 name = "lang#r"
 repl_command = "R"
 
+[[layers]]
+name = "lang#latex"
