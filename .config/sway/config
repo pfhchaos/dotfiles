@@ -10,19 +10,10 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $dmenu "wofi -d"
 
 include style.conf
 include display.conf
-
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below. ISO 10646 = Unicode
-font "pango:Terminus 10"
-#font pango:DejaVu Sans Mono 0
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, if you need a lot of unicode glyphs or
-# right-to-left text rendering, you should instead use pango for rendering and
-# chose an xft font, such as:
-# font xft:DejaVu Sans Mono 10
 
 input "type:keyboard" {
   xkb_numlock enable
@@ -61,7 +52,9 @@ bindsym {
   $mod+Shift+q          kill
 
   #run dialog
-  $mod+d                exec "j4-dmenu-desktop --dmenu='wofi -d' --term='alacritty'"
+  $mod+d                exec "j4-dmenu-desktop --dmenu='"$dmenu"' --term='alacritty'"
+
+  $mod+slash            exec "swayprop"
 
   # change focus
   $mod+j                focus left
@@ -177,22 +170,22 @@ mode "resize" bindsym {
   # Pressing right will grow the window’s width.
   # Pressing up will shrink the window’s height.
   # Pressing down will grow the window’s height.
-  $mod+j         resize shrink width  10 px or 10 ppt
-  $mod+k         resize grow   height 10 px or 10 ppt
-  $mod+l         resize shrink height 10 px or 10 ppt
-  $mod+semicolon resize grow   width  10 px or 10 ppt
+  j         resize shrink width  10 px or 10 ppt
+  k         resize grow   height 10 px or 10 ppt
+  l         resize shrink height 10 px or 10 ppt
+  semicolon resize grow   width  10 px or 10 ppt
 
   # same bindings, but for the arrow keys
-  $mod+Left  resize shrink width  10 px or 10 ppt
-  $mod+Down  resize grow   height 10 px or 10 ppt
-  $mod+Up    resize shrink height 10 px or 10 ppt
-  $mod+Right resize grow   width  10 px or 10 ppt
+  Left  resize shrink width  10 px or 10 ppt
+  Down  resize grow   height 10 px or 10 ppt
+  Up    resize shrink height 10 px or 10 ppt
+  Right resize grow   width  10 px or 10 ppt
 
   # Fine adjustments
-  $mod+Shift+Left  resize shrink width  1 px or 1 ppt
-  $mod+Shift+Down  resize grow   height 1 px or 1 ppt
-  $mod+Shift+Up    resize shrink height 1 px or 1 ppt
-  $mod+Shift+Right resize grow   width  1 px or 1 ppt
+  Shift+Left  resize shrink width  1 px or 1 ppt
+  Shift+Down  resize grow   height 1 px or 1 ppt
+  Shift+Up    resize shrink height 1 px or 1 ppt
+  Shift+Right resize grow   width  1 px or 1 ppt
 
   # back to normal: Enter or Escape
   Return mode "default"
@@ -221,6 +214,11 @@ mode "screenshot-copy" bindsym {
 
   Return mode "default"
   Escape mode "default"
+}
+
+bindsym $mod+Escape          mode "passthrough"
+mode "passthrough" bindsym {
+  $mod+Escape mode "default"
 }
 
 bar {
