@@ -1,0 +1,41 @@
+#!/bin/sh
+
+#requires gui-apps/grim, gui-apps/slurp, gui-wm/sway, gui-apps/wl-clipboard, gui-apps/wf-recorder, dev-libs/bemenu
+
+#generate name for screenshot
+
+name="screenshot.png"
+
+screenshot-everything-to-clipboard() {
+  grim - | wl-copy
+}
+
+screenshot-everything-to-file() {
+  grim screenshot.png
+}
+
+screenshot-monitor-to-clipboard() {
+}
+
+screenshot-monitor-to-file() {
+}
+
+#screenshot currently focused window, put in clipboard
+screenshot-window-to-clipboard() {
+  grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy
+}
+
+#screenshot currently focused window, save to file
+screenshot-window-to-file() {
+  grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" screenshot.png
+}
+
+#screenshot selected area, put in clipboard
+screenshot-selection-to-clipboard(){
+  grim -g "$(slurp)" - | wl-copy
+}
+
+#screenshot selected area, save to file
+screenshot-selection-to-clipboard(){
+  grim -g "$(slurp)" screenshot.png
+}

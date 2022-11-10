@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/bin/looking-glass-client input:grabKeyboard=no input:grabKeyboardOnFocus=no "$@"

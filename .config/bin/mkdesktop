@@ -1,0 +1,17 @@
+#!/bin/bash
+tee > "$1" << EOF
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=
+Comment=
+Path=
+Exec=
+Icon=
+Terminal=
+Categories=
+
+EOF
+
+vim "$1"

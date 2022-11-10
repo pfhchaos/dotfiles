@@ -1,0 +1,88 @@
+#!/usr/bin/python
+
+import os
+import zlib
+import xml.etree.ElementTree
+import hashlib
+from multiprocessing.dummy import Pool as ThreadPool
+
+def get_crc(fileName):
+    prev = 0
+    for line in open(fileName,"rb"):
+        prev = zlib.crc32(line, prev)
+    return '{:08x}'.format(prev & 0xffffffff)
+
+def md5sum(filename, blocksize=65536):
+    hash = hashlib.md5()
+    with open(filename, "rb") as f:
+        for block in iter(lambda: f.read(blocksize), b""):
+            hash.update(block)
+    return hash.hexdigest()
+
+def sha1sum(filename, blocksize=65536):
+    hash = hashlib.sha1()
+    with open(filename, "rb") as f:
+        for block in iter(lambda: f.read(blocksize), b""):
+            hash.update(block)
+    return hash.hexdigest()
+
+def rom_check(rom):
+    file = rom.attrib['name']
+    dat_size = rom.attrib['size']
+    dat_crc = rom.attrib['crc']
+    dat_md5 = rom.attrib['md5']
+    dat_sha1 = rom.attrib['sha1']
+
+    calc_size = 0
+    calc_crc = 0
+    calc_md5 = 0
+    calc_sha1 = 0
+
+    if os.path.isfile(file):
+        calc_size = os.path.getsize(file)
+        calc_crc = get_crc(file)
+        calc_md5 = md5sum(file)
+        calc_sha1 = sha1sum(file)
+        
+    return (os.path.isfile(file)
+            and dat_size == str(calc_size)
+            and dat_crc == str(calc_crc)
+            and dat_md5 == str(calc_md5)
+            and dat_sha1 == str(calc_sha1))
+
+def main():
+    root = xml.etree.ElementTree.parse('Sony - PlayStation (20170522 03-40-16).dat')
+
+    games_have = []
+    games_missing = []
+
+    pool = ThreadPool()
+
+    for game in root.findall('game'):
+        game_status = pool.map(rom_check, game.findall('rom'))
+    
+        if all(game_status):
+            games_have.append(game.attrib['name'])
+        else:
+            games_missing.append(game.attrib['name'])
+
+    pool.close()
+    pool.join()
+
+    games_have.sort()
+    games_missing.sort()
+
+    have_file = open('Have.txt','w')
+    missing_file = open('Missing.txt','w')
+
+    for item in games_have:
+        have_file.write(item + '\n')
+ 
+    for item in games_missing:
+        missing_file.write(item + '\n')
+ 
+    print(games_have)
+
+if __name__ == "__main__":
+    main()
+

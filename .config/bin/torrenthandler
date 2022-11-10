@@ -1,0 +1,5 @@
+#!/bin/bash
+torrentfile="$(echo "$1" | sed -e "s/file:\/\///")"
+#echo "$@" >> "$HOME/torrenthandler.log"
+scp "$torrentfile" pfhchaos@mariner.whatbox.ca:watch
+

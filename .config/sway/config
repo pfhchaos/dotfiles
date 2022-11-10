@@ -15,6 +15,10 @@ set $dmenu "wofi -d"
 include style.conf
 include display.conf
 
+input "type:mouse" {
+  scroll_factor 0.25
+}
+
 input "type:keyboard" {
   xkb_numlock enable
   xkb_options "caps:none"
@@ -24,6 +28,7 @@ input "type:keyboard" {
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+popup_during_fullscreen smart
 bindsym {
   # multimedia keys
   XF86AudioRaiseVolume        exec "pulseaudio-ctl up"

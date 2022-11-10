@@ -1,0 +1,12 @@
+#!/bin/sh
+user=$USER
+
+# firewall changes require root permissions. drop before running terraria
+[ "$(whoami)" != "root" ] && exec sudo -- "$0" "$@" 
+firewall-cmd --zone=public --add-service=terraria-server
+
+cd /mnt/btrfs-hdd/SteamLibrary/steamapps/common/tModLoader/
+# dropping root privilages
+sudo -u $user ./start-tModLoaderServer.sh
+
+firewall-cmd --zone=public --remove-service=terraria-server

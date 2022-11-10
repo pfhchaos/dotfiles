@@ -1,1 +1,82 @@
-ssh home.paradoxzone.net seedbox-pull
+#!/bin/bash
+
+### Configuration ######
+seedbox='pfhchaos@prometheus.whatbox.ca'
+mountpoint=$HOME/seedbox
+
+### Code ###############
+set -e
+TMPDIR=/tmp
+tmpdir="$(mktemp -d -t seedbox-pull.XXXXXXXX)"
+
+extract_multipart_archives() {
+  if [ -n `find "$1" -maxdepth 1 -name '*.[0-9][0-9][0-9].rar' -print -quit` ]; then
+    for archive in *.000.rar; do
+      name="$(basename -s .000.rar "$archive")" &&
+      unrar x "$name.000.rar" &&
+      find "$1" -maxdepth 1 -name "$name"'.[0-9][0-9][0-9].rar' -delete 
+    done
+  fi &&
+  if [ -n `find "$1" -maxdepth 1 -name '*.part[0-9][0-9].rar' -print -quit` ]; then
+    for archive in *.part01.rar; do
+      name="$(basename -s .part01.rar "$archive")" &&
+      unrar x "$name.part01.rar" &&
+      find "$1" -maxdepth 1 -name "$name"'.part[0-9][0-9].rar' -delete 
+    done
+  fi
+  find "$1" -name "*.rar" -print -execdir unrar x '{}' \; &&
+  find "$1" -name "*.rar" -print -exec rm '{}' \; &&
+  find "$1" -name "*.r[0-9][0-9]" -print -exec rm '{}' \;
+}
+
+rename_with_filebot() {
+  filebot -r -rename -non-strict -no-xattr "$1"
+}
+
+prep_wii() {
+  for iso in "$torrent"/*.iso; do
+    wit --wbfs -d $HOME/roms/Nintendo/Wii CONVERT "$iso" $HOME/roms/Nintendo/Wii"%T [%I]/%I.%E" &&
+    rm "$iso"
+  done
+}
+
+full_download() {
+  for category in "$mountpoint/sendhome/"*; do {
+    category=$(basename "$category") &&
+
+    for torrent in "$mountpoint/sendhome/$category"/*; do {
+      torrent=$(basename "$torrent") &&
+      exec &> "$tmpdir/$category-$torrent" &&
+
+      echo syncing $mountpoint/sendhome/$category/$torrent &&
+      rsync --remove-source-files -rv "$mountpoint/sendhome/$category/$torrent" "$HOME/$category/" &&
+
+      case $category in
+        games)
+          echo "Starting game specific handeling" &&
+          extract_multipart_archives "$category/$torrent" &&
+          clamscan -r "$HOME/$category/$torrent" 
+        ;;
+        movies) 
+          echo "Starting movie specific handeling" &&
+          extract_multipart_archives "$category/$torrent"
+#          rename_with_filebot "$torrent"
+        ;;
+        wii)
+          echo "Starting wii specific handeling" &&
+          extract_multipart_archives "$category/$torrent" &&
+          prep_wii
+        ;;
+        ps3)
+          echo "Starting ps3 specific handeling" &&
+          extract_multipart_archives "$category/$torrent"
+        esac 
+    } & done
+  } ; done
+
+  wait &&
+  find $mountpoint/sendhome -type d -empty -delete &&
+  cat "$tmpdir/*"
+}
+
+full_download

@@ -1,0 +1,11 @@
+#!/bin/sh
+die() {
+  echo "error: $*" 1>&2
+  exit 1
+}
+if [ ! -d "$HOME/.config/xmr-stak" ]; then
+  mkdir "$HOME/.config/xmr-stak" || die "Configuration directory does not exist and could not be created!"
+fi
+
+cd "$HOME/.config/xmr-stak" &&
+/usr/bin/xmr-stak

@@ -1,0 +1,3 @@
+#!/bin/sh
+unset QT_QPA_PLATFORM 
+/usr/bin/zoom "$@"

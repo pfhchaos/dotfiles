@@ -1,0 +1,356 @@
+#!/bin/env python3
+
+import os
+import io
+import bz2
+import base64
+from enum import Enum
+
+class ParamSFO():
+    
+    class fmt(Enum):
+            utf8_s = bytes.fromhex('04 00')
+            utf8 = bytes.fromhex('04 02')
+            int32 = bytes.fromhex('04 04')
+
+
+    def __init__(self):
+         #TODO: default key values may not be correct
+        self.keys = {'BOOTABLE':0x1000000,
+                'CATEGORY':'ME',
+                'DISC_ID':'SCUS94423',
+                'DISC_VERSION':'1.00',
+                'LICENSE':'Copyright(C) Sony Computer Entertainment America Inc',
+                'PARENTAL_LEVEL':0,
+                'PSP_SYSTEM_VER':'3.01',
+                'REGION':0x8000,
+                'TITLE':'Ape Escape'}
+
+        self.max_size = {'BOOTABLE':4,
+                'CATEGORY':4,
+                'DISC_ID':16,
+                'DISC_VERSION':8,
+                'LICENSE':512,
+                'PARENTAL_LEVEL':4,
+                'PSP_SYSTEM_VER':8,
+                'REGION':4,
+                'TITLE':128}
+
+        self.data_type = {'BOOTABLE':self.fmt.int32.value,
+                'CATEGORY':self.fmt.utf8.value,
+                'DISC_ID':self.fmt.utf8.value,
+                'DISC_VERSION':self.fmt.utf8.value,
+                'LICENSE':self.fmt.utf8.value,
+                'PARENTAL_LEVEL':self.fmt.int32.value,
+                'PSP_SYSTEM_VER':self.fmt.utf8.value,
+                'REGION':self.fmt.int32.value,
+                'TITLE':self.fmt.utf8.value}
+
+    def finalize(self):
+        """generates final data structure changes to parameters after this have no effect"""
+
+        key_offset = 0
+        data_offset = 0
+        index_table = b''
+        key_table = b''
+        data_table = b''
+
+        # <null>PSF starts every sfo
+        magic = bytes.fromhex('00 50 53 46')
+
+        # normally 1.1
+        version = bytes.fromhex('01 01 00 00')
+
+        for i in sorted(self.keys):
+            index_table += key_offset.to_bytes(2, byteorder='little')
+            index_table += self.data_type[i]
+            if self.data_type[i] == self.fmt.utf8.value:
+                data = self.keys[i].encode('utf8') + bytes.fromhex('00')
+            elif self.data_type[i] == self.fmt.utf8_s.value:
+                data = self.keys[i].encode('utf8')
+            else:
+                data = self.keys[i].to_bytes(self.max_size[i], byteorder='little')
+
+            index_table += len(data).to_bytes(4, byteorder='little')
+            index_table += self.max_size[i].to_bytes(4, byteorder='little')
+            index_table += data_offset.to_bytes(4, byteorder='little')
+        
+            key_table += i.encode('utf8') + bytes.fromhex('00')
+            data_table += data
+
+            key_offset += len(i) + 1
+            data_offset += len(data)
+
+        while len(key_table) % 4 != 0:
+            key_table += bytes.fromhex('00')
+
+        key_table_start = 0x38 + len(index_table)
+        data_table_start = key_table_start + len(key_table)
+
+        table_entries = len(self.keys)
+
+        self.data = (magic
+                + version
+                + key_table_start.to_bytes(4, byteorder='little')
+                + data_table_start.to_bytes(4, byteorder='little')
+                + table_entries.to_bytes(4, byteorder='little')
+                + index_table
+                + key_table
+                + data_table)
+
+    def get_size(self):
+        return len(self.data)
+    def to_bytes(self):
+        return self.data
+
+
+class DataPSP():
+    #TODO: determine how this file is constructed documentation is sadly lacking 
+    # and other software serving this purpose uses the same solution of a giant
+    # binary block
+
+    def __init__(self):
+        # DarkAlex's DATA.PSP compressed with bzip2 and encoded with base64
+        data_psp_base = ( 'QlpoOTFBWSZTWdmjTj8AHJr/////////////3////////+f/////////9//+///f/ff/4B9drfWa'
+                    + 'APAeoHXDSgo00dUOL21a9daD013nt7t7rkXveVxnlrbd7e8kksVxKLtXvOKCjpbyD3dGcNm3bS9G'
+                    + '7N6eL0DoYvHvhqaImgTTJoyZBpoaMmCYAmCHlTB6pkxPSaNJ6Mmk8k9CMUep+UnlPCT01PKBo9GU'
+                    + '9Qep6m1PRAA0HpMg000AANB6ho0BoaANDDQggBMgaJppppPQBNTBoyno0aZNJpp6KbI0GITaam0j'
+                    + 'GmmUbSbUybSNGg0aZAaGjQZDRpoaDTQ9QAaNDQZDIHqMQAD1BqZkhBU/TU0CJ4kymmeiaE9qmanp'
+                    + 'Dag0NNM1PaoZpPUBpiNBkA0ZBoAAaAABoZNAGgAaGTTIABoAADTTQDQAkREEAjQCNTMphNqYo8mS'
+                    + 'R7Jqnk2k8RT9U/TSHqmj0njVN6mp6E2obKY1DR6Q9TR6nqekBtQGhkGjQaNNAyAAGgGgANAaDQA9'
+                    + 'RAAAAAAAAABoaAAAAAAAAGgDQAADQAAAAAAAAAAAAA0AAAACRSaCaATTVD9TKniemSPSjemVH6p/'
+                    + 'pMSCDGnqmnpHoamR+qD0mT1DE9TTNE0ZqMQxMBHqYjAEBpoNAPUxAaNpB6gyGEYEaaYQyA87GaBw'
+                    + 'Q+kxyYqmrhSVXFbsnYT7fNZObAm1A1fghVmk0CBkExOHeKW6Y7KiQsGVI8bPrOSPcJKTsTUicmPt'
+                    + '0rzMQ1I2yrWi514RVzd4TsXzaD/zsta0jQxaE8Po46j3sRlZ7J+FPevnJjA1RshkkYMiBgMCzOYC'
+                    + 'xJ8QBqiBBQMnP4WzzYnT7H39Nl8BweHYBVJkEAysIyXz0RS6docEgymkt1HS+k37er+ZdM3+XXyf'
+                    + 'YdfxHdhXzDIIkSTBkY4N5RADm9M4TtDuwOfJQBwbc4EYkDAWTI5cdtJhFVdRlWvjGWWW1LUenso6'
+                    + 'KtQv2qhUrYOxGSpVUq4ZVEEQJz4MitsEqVIpX4qrFQZEMSZSBIHDy8QPiXzkIZg8+goRXtfTty14'
+                    + 'gsQ4JgiURLckRloF9Co33DoFPRYKFtRfV9zgwWDhxVDIHCIiYkJgIC2KNOUXyoRii9ko8jau8TyL'
+                    + 'MLGrQ/UicToDRDhGKZo2yiJgJbkUS4CRhMjoqURGSattjdEMiso8ClGnIRDpIMiWSjBMIckI+B/b'
+                    + 'l6nT9h7a5LWvRt5fg7lmZ5WFobcBAa9CSQiG6yGlKIBk+okKlGyAaaKRLUo/q66aPPVF1taoohwn'
+                    + 'CNSCZChMskGQ5kJkhFaSsNAm2ypSrCJbZCLCKSEyqSEyqSEomxg4kLYEYRNDMN33ja79DdsWlLbb'
+                    + 'Y6urCJS28REQkkSTxqSSSSiIiIiIiInOk5zmkkSTNJJJJJJIkkklUiIiEkkkkSSSSkkkkkkkiSSS'
+                    + 'UkkkklSIiCSSSYSSSSSSSJJJJSSSSShJJJJEkkkkkkkkkkkkkwkkkkkkkkkkkkSSSSSTCSRJMJJJ'
+                    + 'JIkkkkkkkmgmKsOJv58cXmbOZY/GoZdmYDyrBJxnMCBe7am61ECgQhg0iiG76KcTgLwulQgNjYzr'
+                    + '562qsx2pvrbNlfqvWjyD7Ckzw19uNMNOdkY5+rWze81PNyZInVcvy+Sy+ca8Y1u0cYikJH4JqMbn'
+                    + 'Rw+hdpnLPzUEFFkkrkL6omvTQ1Dp1nt9PJDFM2GtewUm0WsZHI8ygyqtUbru/ouPzbt5jH6G/oth'
+                    + 'qzS+ioWoL2pJVtiSJq6C13s0MNV6k/blPH4lUgL4yB4iEIQYLpDAD6r+O8PpkrCakGWKa1ruPHOq'
+                    + '0LxkikvFuMXJZneUuO8Ws4XRjaZJPmJiG4dGnM/iVKNzAcnpCSBThuvONiqvuKeejgxIHKa4HLb7'
+                    + 'kFeBalCg9O0LloTRI5gUXXV1jpR3V06I2uNq4DWLZMyEhaMQqoUsCizBxHQgw9ND+B7UyDHuEoj+'
+                    + '/HSyIRUGlbYbRrPHnjzx1SPcKAfMsfVIXa92g+8YLZcjP0GeI3dmB4qwgrr5fIWKwMDAmpxOsPWH'
+                    + 'rDqfAhvg8KJ3MMpsSbQct894R4R4R8LZ99K0HLRvdEhGAeAeAeAeJnQdrxPSrTPR6dZO2ZWvqJXc'
+                    + 'xGb3UQ0aLR9NqQY8cA2LOPOPOPOPU19C+gkaDSvHeO8d41Y0sjFotK0do7R2mhAliYYIwtugdA6B'
+                    + '0Ho61n07dzZzqb55bLMUUMJWkRkhjHjHjHjOvgSsdg7B2DsMmr3dBEtK7xovHeO8d5aQksOrFo7R'
+                    + '2jtGbWiWE5y/tZzFCnD1hwt3ZfGCpuTSBedYdododon00gE7RZQNBQOgdA7jXgWywLmFo7R2jtGV'
+                    + 'aPTsW6ZLtHaO0dpdp6VM+65EZ6fkVpIjGwt3dJFkHkHkHkMkNiOwYZnaO0do7SsJKo6jqOo1haLh'
+                    + 'mVptBgauHcO4dw89nB1OfXBWM/e2T0t7AK8t0pi+A0XmHmHmHmGJVdR1HUdSuvtgK9m7xTa4erAN'
+                    + 'ljTijlGgrDrDrDrGJARy1RU6LCtKikdI6R0luzd0FDQ22jQZcO4dw7hgig6DoOgwqw2GlYOwdg7B'
+                    + 'grWVHUdR1OHF9upKCGjA1eO8d47ykADHQdB0OFAlVusOsOsN8NohZMhWMiIYdw1Xw1+ubKeBx3VE'
+                    + 'lzBVncsg6Z/icl0do0QC7rKA3nRhIQg3zMLtYSQ+FsHkQKHrM3bmNVwVewKy9FzEnpODePYdIFCZ'
+                    + 'WMXY2ygs8QyzMOAXY9NbJbHyySZJDas2IPLgIQK+8TWZ26s15vFhL+iIZVWAeUzLu4NfQhC4yYFs'
+                    + '6JKSF32jm5uf0NhbjWq5FkeLFERCSEdvpwHjbzYlWFsCO/Yg++xwVq4OLSARmzvJPpWXbEcP++EB'
+                    + 'qtT4RKlZefqGFRTHRUgrkpbZYK1tTIEDRsX2kpxFFNCbuHZKcOxE7Vai4m+xssbUcY2gvmAtuG9C'
+                    + 'cCMKKoiIrbXJSk4xmNnzzt9z0t2hK+BQ1y5MCYYCj0kaUZ2doz4nHB7rZD53m9lfXP2AtYeXERKs'
+                    + 'oWMmtUNjrly1o6FQY9Jky0odWUf2vpPaTyshAtXLZBM+82J7TdxcxIslaEr2b3jys5pw49tfAlq8'
+                    + 'eev6FcLSWamtIj5C3bkSyM9Z3eicGi7bFvJR59iPVs5bOye/GivCic2/mH3LN5dB9HdE47ZJPnZm'
+                    + '7hTysEVqYheXQWA0zUFwLCVEvtpbOwsUMICxXxTeblTecoXHqg4cQZ2BgBcoSCFqK5/XOUq1eqPH'
+                    + '1UGAUAnOMr3Fh8144XBMZEQ0KIVEvEiR40q7ykgsmGEAI+/rXE731QT2KA6/fs75gX26LPtGxSlj'
+                    + 'uxCxtINPTjeMS0nLEBVqjz+s8XxqIpytTx+whjx9BSUzYTdnyPBSLcw0ckqTc7QILkrJctu2r27E'
+                    + 'nPCwnOvaxuU51G9k1t69cO6as+NNNGYMR7rabWCwJI7YGVAgBP9nSl8Z4czuTz8TRotq8PS5Tc29'
+                    + 'eSjIiw6c2U1DpuE3aW6Y4WfsdOz8DyvedIcTfxbMBmJAYWEQvanGYAYtgOzNXaFiGKGJ9tbcbhQI'
+                    + 'gnQvx0xp95ZaxHoboPsGYWhW3RN7Bu7kUSKuXXiOEIbimfHIGDr1BxnEFGMeJn3rvF7HjzWgADGF'
+                    + 'J598t4agM4IJ/ejw/0xU2R7j2C/N2vmKDVXF93dvmXJg2lv3AxyNmJkVYEGckV4Cu5cCdTHsbdKR'
+                    + 'LGrXVLomI3Z6zoCZhNIxA3cW1m5oV9vYSJKtaEpFr5rDLwO0wW4LEgeMBa183wGRmOp0Ukzc6HLp'
+                    + 'xOECFfixbtUuHj03ZjqCMJOYxo4CkbE+Nv+DktrhI606zQUDBAoiNnjRV+S0WNJSMVDC/owDqmJU'
+                    + 'WjbSJKswWCrhUkQjbPgcbkdvjS7GF+Ugz4+KzZHOVPULFqNI7xlLCBJusNNjYNx54pQJ04OJWiUs'
+                    + 'FZgvlBcLbgOF7aADDUUCTxwhS0KGieZHa4gFZ2kCIiEeHvrgV/yMJRHurkF2tZKJn3eJIuV3IiHH'
+                    + 'y1m6b4tOQ3zqdePAgPWMRlwjxOGy+fmJh0GQikkT0mSxvDY3OmGGAV+WTAZRWQaTuI37iaAm8i9H'
+                    + 'opdO9awZs06yydn9Rv9vsU3Nm+l5gYJvfGPUoQa2+0ihbxd/e5phIDD+DAFlYZCqyYhEutjrV3WQ'
+                    + 'IIIiyV1LaAsuWBBnaCDSDgGIpSAHoMpaFh/GjH4pVgTFgbY2guc5JoSocaUBPZ2AiweLwoSKM3TE'
+                    + 'q8zNJbv4QBdeeOd0pAF5CEC16ZbyaANgUJuwp6VnP3gvcmet4Oc6RFcMAQtSDkc5/quOXi0La8fr'
+                    + 'aWx13ciZ0NK762z4HTz9C37PwLxEMjCR7RedYoT25zz0JeJ6Pao9ocRVOb3Hb8LOsdGrXic5NYdO'
+                    + 'xQEJBIoBBIUCO756HiXD8DUi63GrvAhhxGpaodtfdGSFKuPJta24scQMGL8fOMEapsUiMCCHXqxX'
+                    + 'UZSQIpAzU+wg01FNbvpsppYei4brp681ocOO3zz56hNTxcESGWuFkwMCvNhe0mlGWGI2/SwQAg1+'
+                    + 'LCjq08vzvRfaVk9uN5ivevn4UKJbnEOGydIvOtzO3SBi0z6w/jjA1IdBhaWjy8oIWu0ilNPT8BbP'
+                    + 'IwRvRXPI4Dl4Lywu4j1rdtx8Bg8xaQDqTVqSE25Bb722i2O2wUw4Xf5Ue1zY7rRtj4ZGo/f0wtJs'
+                    + 'abG2M814EhATbbS5DRgKd7feJAr28JkyuDSbbA85TAdxEGl38c/5zKSq5urO0c2kizWEBa7MnRlW'
+                    + 'GO2Jdsp1IaSag+hcPDABIE9O2ICRizK938tz41T8eqrZjKLE9DxfP9S5DoUw9Ds+h5f6qHO8nyVO'
+                    + 'YDJsmapHCxzlWSG8V6VgknVJAzAzekwaFVa2mnx6zjcc/jez5da591hNRnMsbbpLFoEohJNxDglh'
+                    + 'LGxDOzbB0cXtEATSGw4RyoSPk2lQZVptQzteegbRAm0kkjVzcfxPF6HK5Xjc/S1g+V97tYxX4R5y'
+                    + 'Huty9ceb4145decw1czwEGMicH4riOSEmzR2GuSl0o8mzlumMnUJTtJ8/LGs3BbmqDafI6tLRNsr'
+                    + 'oct8h90vRrB6oXPt9hNjDI4xSvvzuV7kgauQAF4PVGb5hCMwZ2kfCi1e9ay3dxQCKluWMa9E00b7'
+                    + 'ljVk1bXBPY1AgjC9hLTOvWXc8o2DRSxE7WkaVFTwpBFsLQoCqNJIwdLqczmuE1k1cKGfOX2915GB'
+                    + 'yve8DxRzhXyFyStyCfVpUsXeqp5Bk08cmaxa0AoohlbO8O+MimWyqyFDJWmMC00kg/7r9Di9O/q9'
+                    + 'hmbincZL/F+7x5V11aBct26NygLItDIAIsEIOBa1DmMLYgtvpPq/WXW7rd73N/dunTvX0t//Vz0/'
+                    + 'I+30keKPudEG9BBhuqMmwPmT83cCje1tzWZMWosgoEjgGF8QHpEBdkNaMcGMwOk+gVo9+xjZmbm3'
+                    + 'qYbpA1Kw2k36agVP5/m5Xv8Jqz9JNRLeDgJA4Ioqbx0Fb1ttbiGyooTuW2UkyFJIjgMJAt9l+d1O'
+                    + 'L9CkpWRT2qmmAWGgJ3YANBgJE5AONKqjEgggMx+cw2m6XmjEiDC8sRDY2DYNtTClhzaSt1J5+aju'
+                    + 'd313Hi9CLs9pMMElvmbrPCEcJiRXzI+s7vx7Njs8nO9BywpaGDrXdZ93Vdz48mPPj91RwThoST34'
+                    + 'wZXHKrXrKAPnfuqDFKXhzZ+72PDx3+OzYM27xCCl16B45BpR2rkM0wogxzAAWnCjdTNp94pmva/J'
+                    + 'rStBWcyg/ha9t1H2ytXlo+ZPprGDABkuZzX7B53W4hgnzGEpsnDM2XZ7nntyEy6WJIXFYLlcT0Xg'
+                    + '+04uLgX+t9z2WvjVPEzeTJbRewzcjRbcvl2MKFO6T2+m5uGq8nFGK1L3h6gYfXLtHOKHxzpExN35'
+                    + 'Cutao7cFzg42+td9AXdcdIuMjDGzMjWgr0En3Ks+XmFZKrShUJWQ87NbYZ2EG+tsbbWoqT1bdadU'
+                    + 'kyzzeMG61udVoSbWaS8WO0fBaUsoGbpiYYClE4nqff64zFAwW2oLOrpNSZ4bB95QEZk81i0WLiIR'
+                    + 'srNtrmiGIPlGUZSQZAsbGw0AujukLv7tAXgNYfNyxEKopR3Y8zKtIsv2qXK2thqO1akLCwOcMAnw'
+                    + 'EjXrJMIrkNEZgtExLJnD7NptOpL2s7NnYXV09ec8t+Hwxev6bp0qU8POiEzFhIjJGFFmpPmdXY7i'
+                    + 'BCq81qJPa7a3yf55DzAyMZ3iEREnj+DzNjdriPt9yOa5d2FnpsfCbko+fIyLDf6/QJ7dlebHAnl2'
+                    + 'mRvgZsP+19imC6YJkgtYaTSZX7evOamsZtzZCgY0V5S4tdoxJt04bOytitoZ3wRro1XOc0zt1Apt'
+                    + 'LJWZn6DnKdOuFEsbSTCufXJ7ZB7jSwm3NYMKb/BR77Lklp3buokYQYEIieV5gxIE1aTA337SmUkg'
+                    + 'i1bxS4Dj3t1kb8N8nhQd14fg1rXlsR1LwzL00E5ImlGS2Nw0jxyCCNr5KtKtYeXt73X2a97yfW8n'
+                    + 'Z5HY8nrauTp2ZWt6mn0jaWu2wNHurOZbNLshEf8GYztcGJbv98/wnmrLlkTgA2NV06Fx5XfunMuJ'
+                    + 'Ch95p2bXu72/ci4yKtp3PHwVHkRbrUAEyIjCLFubkiiC1LQt9qcqQhz6CBdwliDGdznUhLXOgn0s'
+                    + 'BQEzkjEsKiIFLsTTNZCogWaLxA4HCM3FABw0Bpp9zf+rss0lDIrVbAbnS7+m7lm8HMTQplbyeYaK'
+                    + 'xirQD41b3bNWagaXlBA3GaKrFda6v0+DWcZTIxrYJIFu08NTdC/JFQV5a8DK2YG3crLT6CUj0zOX'
+                    + 'l45ucVN5YPQ2iy+29Wsbd+akYceXTrGnEO4vRGKJiCQmR0RZZB06KNsUakhOnZu4J6FAxG6/VMXg'
+                    + 'jWx6JQqMtVxbNbFrBMFjo4bG5r456FFMFomlzgRCjZsTLHktBUtnoUiqmGMxfdpHfZ9C2E7LmUhn'
+                    + 'XPHBw4zGBD0GzeiGddLC2ykQJw72Auwq6Yht5rHjRF2ss5hLMDS3nd+Bux0dlr8GLLSqpPf3a3g6'
+                    + '5cVKc9iuohlaCft23WeRnWbmBQG00yaXe3Q9HfbjL/JMEGX0NRfi+EnnzpEnxOIvNqMVXzbszGDq'
+                    + 'TytfDS3kn95YbsGhhwX0fDnM43ZnOP4hUa3ACfCKGqJvgBRfXNvQV5v4cAWITr4t/ZfgXn2XatEQ'
+                    + '31lJ/ArxvShuUNo1C1HLqYrZ5SxLZa0Omx4xsTorhhy3GtyrXM3QXUngvvDsTKnvFVoHU4aLVYU9'
+                    + 'P4Sn3DIaRBSI6YGYEJl6zu7KCpMlA0fSzKgq313G8/5U17mEhzdyBizPtaBMgaWH71ieMzeQQxzE'
+                    + 'ZanGXjzvT4nitJ+Ey7A6rQeOIRXsCcIbIJoEEZqwlopoCexh1eafi5Lu+g6llj8TndHTyuNxse34'
+                    + 'fE9fo1szh8bP4us14ezl33CtrVMvq7wX2MoX+uH0PxfV1+08STLg6EyxDKkHM1YXL2MXNwBhVgVg'
+                    + '4aJqWVK/vo0Cz5DCu76JdacW0rRWGo6rmjBqjzMzwWCn52KqHrM7N3m3AET/NGoVXYZT1JSaXqjQ'
+                    + 'uAH2iQPZu3/kA7moOPk8birIDQDj+wppyZ0ImGDHe0kkiWuZVsNwEj30turkZVfXat8Hq/V1TA+M'
+                    + 'wxNA9Tb0/H+X1m7O30VzhbnVZX2XIXhuVcyvsozD48Okgrc8G1o2oup5+JQY2KhxoNC08Wp8TgR0'
+                    + 'IjUcP2PkPkMWRwcKHwCNxiAhNMhjs8p/Gz3j6DBz4XJstzD1M7K3WDz8fPz133e7vJ3VD1u25HIh'
+                    + '5XKp1sve73cbflVsnL22XmTsoThNEwSxKEkSBfiPwAUcRhFEQQxfCEIIvReCALsXQuQ/FwHypPrc'
+                    + 'qFPD6uwerjrmaWwgEnLwV8KvRqWRFRxNPuqB3eA9J2N6Yh9JpUC4tz86Ol3vTUaNKzlzIXkryl5a'
+                    + '8xeavOXnr0F8BeivSXpr1F6q+CvhL4a6q6y+0XxF8VfGXx18herUpikKIwBQE8ThNEwSxKEkSBfi'
+                    + 'OIwiiIIYvhCEEXovBAF2LoXIfi4fFWy4YLKIbm7UVOreK3qsFWErfKw1YisVWMrHVv1ZCslWUrLV'
+                    + 'mKzVZys9WgrgX+ArRVpK01aitVXBVwlcNWrUpikKIwBQE8ThNEwSxKEkSBfiOIwiiIIYvhCEEXov'
+                    + 'BAF2Lo2zaN7vHlO06m12M+DPZc6DksgHAxtNiTY38JDDkgA5HSPkoDVY618tDWiLRXEVaMtHWv1p'
+                    + 'C0laUtLWmXEx/MWgrTlp61BbAWoyKK1JamtUWqrYK2EthrKrValMUhRGAKAnicJomCWJQkiQL8Rx'
+                    + 'GEURBDF8IQgi9F4IAuxdC5D8XD4qT7IxbmmnZYimutuTnzqPKzXM3Bhwc3CgKR950GsCFsRKLRob'
+                    + 'j0ETMEouu6tcj+3pn0Jqa9Zky4QtuJYj6OGGaxwxbJAGbs0jCPkWkw59wmNrigjgHDU40dY4Gs3E'
+                    + 'JG+tTFTMxzk25jXBAjvXbsb0i8s+c3Z5O0Tb7yH9VKnj01YtBDv+EgUNHITyfOQONtp1xqPZAIwG'
+                    + 'DAYnBz7lXqNtP0jzYXsRtBPoK0e61psfZjxMJGhNWNWeo3VN+83bewejlvHrXTKDK/W2m853hYFb'
+                    + 'JPV3tyHuCD+cYdF5hSxtrMibP5eYDLMgTnS55K92qzPJ2ENKwRr6+017sdHe2cdyIfSlqJuW25Nv'
+                    + 'Qi7mtzH0M4JLXNthK4LAo4aGNuxdmx+uYdAkA5TbbTbbYCY02kxtoY2MbbbSGxtsWZtgiGA0Myzz'
+                    + 'ICS9xOCc75TCcEF7B+vcLZX18AflasRELGxYTRNFwGLYiJqksI13FzgCGepvuyPVdYpAeK0uJ7CD'
+                    + 'C1gdzPhtSyvE0Lwoh9ngu+UJo4epZjUxWNfx82/fmSxRgE7xbtYzYlvg84Il49UEhFtMZF3GqFHW'
+                    + 'IQEg9KncdYcQGMeyZud/kAxaukjc805AbSZxRNDlCGkJbPHLOv6/omyXRY2inKNAbcpuF8jXoURM'
+                    + '4AHYAgibqsCWdw9Y6Hhun5pjjgkOdnaNvj57oIhScDFFHGpawLqqqtpEmaqYSqQIglz89GBjNOQ1'
+                    + 'ej4MwtND2EEBEL7jIN9doqppw1bDvipebAsAHRPbBWA8QzFai1g1qXVV9c7QlsmuyzaYFE82LRDU'
+                    + 'SyWWBVQZCaG0BvjIDG0waLzgm3f96kZONc7EzBE9i0bR2zpDbSHDRdzWVBW22b5MXoEwOmmsPlgM'
+                    + 'jpO0T5nmqBbtpsSbN28thAbLShptC9DmL0ufl+lxWi0s0R0mQlx2GrfbgHCLjeTKsWiX9d0tCqPo'
+                    + 'A6qW1gaDag2hmVLvi3KrwyPCM653HSOLIjunjHuSKEBwe9yyXHPjKB8Op5m66pIKb4eAlWlU8YwA'
+                    + 'sGUhAHgiyfFdAGhXDpPPTyWsxIYgvd5HhiUKgtVdMNSy6TeRaVbvcM3CRAtIMA+JDIaQamMN6y5S'
+                    + 'Tp8FGSV4dOVEQu63TpKJZpMbBHZ5PUeNUDOaOyFwYynBMshj819d5G44gh6tElA98Iz9O9YRmvw9'
+                    + 'QKvzIH5yDSyfL4bMKdCFQyIjKFY2a8wzMFi6PbwLK/PMl3Wdc4O3Tn99ocmg9gG9cWhuPI1ovY0X'
+                    + 'AhmyNOtN8RHgMriYm7jnYPlHwLfN5/e13ht0l/BhHrmGtTwMFEKo11H6nvvU+m3q0jCWjywsdQgJ'
+                    + 'ZB0xP2QWYQ3kRQDzN/FJDVx/fLbWF/ScGhicS60eJtRv3DOCyFs7k6no9chnU9Vh2A6+IHZCMT4p'
+                    + 'tKEuM+9zHFVaYLYV/pevU8Iao++ZjZqsCjKJk6hWYaWvUTkHGAdYwtwShVLXYCjvJ+n5GS0EQxA5'
+                    + 'TMUTIA6TKsyfZKHCpt+Yj3b72PH5MYmEtrGEempssqEpEvoM2rRRi2bMLHZB2DI/w9wxr27ruIef'
+                    + 'N5pgXuAZx73mOO+6OPtfKbdbDNct+6u5rEc7l7NhXTxqzc9FMTlv10OKuspNhqcMjO0dmBIuS1y9'
+                    + 'Og2qbTfcyVN+KdRq6Lz/OhGMW+mIDDhszN02IM1k7m6bWqSOh193ysTwyIkBkB2KDFrevVwjM2wa'
+                    + 'Gmxtj67srvb0GA0UAbQxlfsSWwiHlxfbZzpP+R+4/7YA4q0DFrcz0tn2LJ2QjRB2C2siuIgZVhKQ'
+                    + 'zyhEyr9Q7Dss5kTEFcGQLWm+RjPQN8/N3mjzf+tO/zhgFKOaEca+if7SZYIBuHMH9OgDC8migIav'
+                    + '4X+OTqN63f0Zu81Ue227qDz13gHfaTn1Xk465J9XNlbnv/p9wfUnaxvLWCcbUd1pHWx3O6nZRxxo'
+                    + 'bG1u7ViMFteUjIhTDKIE4Yscc52c4XR329eN3BqavF3WZZEj3z12qNI33XYnNo1VrCNAacwHRZVs'
+                    + 'abhptVP9YA3bPJZtMQb18b8aLH0vix7jwO08v+QuLLnRWSW/PnvJXxudwJZImawv8ZlahtvilnDC'
+                    + 'xB3WY08xygi74MuDZJhrln35f4tUEs+0Wtd3SKtWwXgOnBNT21ocjW5QYcrY1pD2SO7Hup9JmSTh'
+                    + 'VRClvvcOpCHs+y4vAZw4D2y4Z2aThqXAkotXbVRVPgBCcrVG8Bzg78aZImNslT1XrFGqI+JNjPCp'
+                    + 'ZZEMiSaeFPRfwlsTarsXI5ikDm09CbuJipQvvcXzRDsNXOAkNiNCEJL0ndQhI8DW7yfisS5jEft/'
+                    + 'ChAjuWjGzvGuAwOAwWTy7a0zb0606/V9jILqNmqyGDYmm2yGQNtjbzRERA2iSIQn/ZfIYGIVWIbl'
+                    + 'igaG0A2LydHUjuo77q8vxN7belrI+a9nJoMboOkKBpsYLIUyd+utlhWYwwOy2iYxSxN1sIAk6+BH'
+                    + 'JYFXpdbf7u/f4lW0VzMTbbTGNNFIIVlpbkFYJoArTDmq83Mx3LUstbZxSXi/DgkFOtnLty3NgPEz'
+                    + 'NboUA5xgt149r5f+c23PgMUtC1oPDlB0a6zr+F5XB0i233Eu+9ggNBjGtuYBQUna3Kiliu3kQviz'
+                    + 'CvoI9fwICrq4iDifGzL83ByKGBjaRs47clEkamvr7ek3t20+8suHreN6OisYbbDrY4zscRxkxLbd'
+                    + 'uU4fAo8EXOzRPqDTwe4L0gyHmtJwOH+9dTQvfTtzbHj+qm0PXKZZicCWgAE+mwnHvnoJgQ+6XBaB'
+                    + 'YTnXGTyk/ghuFhSNy1JCSuy3Mo1htR0domJ6DBPpVuqmIo11cL3GAh/cAcMBhkZPsp2Pp2lj/59/'
+                    + 'XY8uMn7n/1mW+kSSzXcOvnedRdwOoOyAhWGwwV67WmRjtez5Swr80TxwRf92rqx3n/vp+SsbBWRA'
+                    + 'jydL4CqJT89HAZUl+W5yN/h7vSHvOVBe+HY/ZNJKxm4+c0lVXxb6jrfGj9u9anvzUH/MsdfyvScR'
+                    + '2m7yhT/RWXVmMGKiAIAhkZfbF2t3JRv9N78OoJDKEwDu0kJqOpCQxTaBzU9vtsRGHj/POZGFUxFM'
+                    + 'ZIBYkY6jVMbQlkmKD15tQPif8XckU4UJDZo04/A=' )
+
+        self.data = bz2.decompress(base64.b64decode(data_psp_base))
+
+    def to_bytes(self):
+        return self.data
+
+    def get_size(self):
+        return len(self.data)
+
+class DataPSAR():
+    def __init__():
+        self.__header = b''
+
+
+class pbp():
+
+    files = {'icon0':'ICON0.PNG',
+            'icon1':'ICON1.PNG',
+            'pic0':'PIC0.PNG',
+            'pic1':'PIC1.PNG',
+            'snd0':'SND0.AT3'}
+
+
+    def __init__(self):
+        self.__header = b''
+        self.param_sfo = ParamSFO()
+        self.data_psp = DataPSP()
+
+    def finalize(self):
+        """generates final data structure changes to parameters after this is ran have no effect"""
+        
+        def get_size(filename):
+            if os.path.isfile(filename):
+                return os.path.getsize(filename)
+            else:
+                return 0
+
+        self.param_sfo.finalize()
+
+
+        files = self.files
+        param_sfo = self.param_sfo
+        data_psp = self.data_psp
+
+        self.__header = bytes.fromhex('00 50 42 50')
+        self.__header += bytes.fromhex('00 00 01 00')
+        
+        # SFO offset always 0x28
+        current_offset = 0x28
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+        
+        # ICON0.PNG offset
+        current_offset += param_sfo.get_size()
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # ICON1.PNG offset
+        current_offset += get_size(files['icon0']) 
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # PIC0.PNG offset
+        current_offset += get_size(files['icon1']) 
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # PIC1.PNG offset
+        current_offset += get_size(files['pic0'])
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # SND0.AT3 offset
+        current_offset += get_size(files['pic1'])
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # DATA.PSP offset
+        current_offset += get_size(files['snd0'])
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+
+        # DATA.PSAR offset
+        current_offset += data_psp.get_size()
+        self.__header += current_offset.to_bytes(4, byteorder='little')
+ 
+    def to_bytes(self):
+        return (self.__header
+                + self.param_sfo.to_bytes()
+                + self.data_psp.to_bytes())
+
+pbp = pbp()
+pbp.finalize()
+
+file = open('test.pbp','wb')
+file.write(pbp.to_bytes())
+
+
