@@ -1,0 +1,15 @@
+#!/bin/sh
+
+target_boot="0000"
+
+# script requires root privilages
+[ "$(whoami)" != "root" ] && exec sudo -- "$0" "$@"
+
+efibootmgr -q --bootnext "$target_boot"
+
+mv /etc/systemd/sleep.conf /etc/systemd/sleep.conf.bak
+printf "[Sleep]\nHibernateMode=reboot\n" > /etc/systemd/sleep.conf
+
+systemctl hibernate
+
+mv /etc/systemd/sleep.conf.bak /etc/systemd/sleep.conf

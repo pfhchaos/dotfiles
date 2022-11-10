@@ -1,0 +1,6 @@
+#!/bin/sh
+export RAPIDMINER_HOME="/opt/rapidminer/9.5.1/"
+export _JAVA_AWT_NONREPARENTING=1
+
+cd $RAPIDMINER_HOME
+./RapidMiner-Studio.sh

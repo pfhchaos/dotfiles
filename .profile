@@ -6,7 +6,7 @@ export XDG_CURRENT_DESKTOP="sway"
 export XDG_SESSION_TYPE="wayland"
 export GTK2_RC_FILES="$HOME/.config/gtkrc-2.0"
 export WINEDLLOVERRIDES=winemenubuilder.exe=d
-export PATH="$HOME/bin:$HOME/.cargo/bin:$PATH:/usr/local/games/bin:/usr/games/bin:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
+export PATH="$HOME/.config/bin:$HOME/.cargo/bin:$PATH:/usr/local/games/bin:/usr/games/bin:$(python3 -c 'import site; print(site.USER_BASE)')/bin"
 export TERMINAL="alacritty"
 export EDITOR="nvim"
 export VISUAL="nvim"
