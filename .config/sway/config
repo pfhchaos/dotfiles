@@ -11,6 +11,18 @@
 
 set $mod Mod4
 set $dmenu "wofi -d"
+set $terminal "alacritty"
+
+set $ws1 Comms
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws0 Win
 
 include style.conf
 include display.conf
@@ -48,7 +60,7 @@ bindsym {
   XF86MonBrightnessUp   exec "xbacklight -inc 10"
 
   # start a terminal
-  $mod+Return           exec "alacritty"
+  $mod+Return           exec $terminal
   $mod+Shift+Return     exec "$HOME/.config/sway/scripts/remoteterm"
   $mod+g                exec "systemd-cat --identifier=qutebrowser /usr/bin/qutebrowser"
   $mod+Shift+g          exec "$HOME/.config/sway/scripts/browsermenu"
@@ -57,7 +69,7 @@ bindsym {
   $mod+Shift+q          kill
 
   #run dialog
-  $mod+d                exec "j4-dmenu-desktop --dmenu='"$dmenu"' --term='alacritty'"
+  $mod+d                exec "j4-dmenu-desktop --dmenu='"$dmenu"' --term='"$terminal"'"
 
   $mod+slash            exec "swayprop"
 
@@ -112,28 +124,28 @@ bindsym {
   #$mod+d               focus child
 
   # switch to workspace
-  $mod+1                workspace 1
-  $mod+2                workspace 2
-  $mod+3                workspace 3
-  $mod+4                workspace 4
-  $mod+5                workspace 5
-  $mod+6                workspace 6
-  $mod+7                workspace 7
-  $mod+8                workspace 8
-  $mod+9                workspace 9
-  $mod+0                workspace 10
+  $mod+1                workspace $ws1
+  $mod+2                workspace $ws2
+  $mod+3                workspace $ws3
+  $mod+4                workspace $ws4
+  $mod+5                workspace $ws5
+  $mod+6                workspace $ws6
+  $mod+7                workspace $ws7
+  $mod+8                workspace $ws8
+  $mod+9                workspace $ws9
+  $mod+0                workspace $ws0
 
   # move focused container to workspace
-  $mod+Shift+1          move container to workspace 1
-  $mod+Shift+2          move container to workspace 2
-  $mod+Shift+3          move container to workspace 3
-  $mod+Shift+4          move container to workspace 4
-  $mod+Shift+5          move container to workspace 5
-  $mod+Shift+6          move container to workspace 6
-  $mod+Shift+7          move container to workspace 7
-  $mod+Shift+8          move container to workspace 8
-  $mod+Shift+9          move container to workspace 9
-  $mod+Shift+0          move container to workspace 10
+  $mod+Shift+1          move container to workspace $ws1
+  $mod+Shift+2          move container to workspace $ws2
+  $mod+Shift+3          move container to workspace $ws3
+  $mod+Shift+4          move container to workspace $ws4
+  $mod+Shift+5          move container to workspace $ws5
+  $mod+Shift+6          move container to workspace $ws6
+  $mod+Shift+7          move container to workspace $ws7
+  $mod+Shift+8          move container to workspace $ws8
+  $mod+Shift+9          move container to workspace $ws9
+  $mod+Shift+0          move container to workspace $ws0
 
   # reload the configuration file
   $mod+Shift+c          reload
@@ -256,7 +268,7 @@ for_window {
 exec "xset s off"
 exec "xset -dpms"
 exec "discord"
-exec "$HOME/.config/pianobar/pianobar-bg"
+exec "$HOME/.config/bin/pianobar-bg"
 exec "mako &"
 exec "swaycons &"
 

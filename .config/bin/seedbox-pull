@@ -46,6 +46,7 @@ full_download() {
 
     for torrent in "$mountpoint/sendhome/$category"/*; do {
       torrent=$(basename "$torrent") &&
+      echo Downloading $torrent
       exec &> "$tmpdir/$category-$torrent" &&
 
       echo syncing $mountpoint/sendhome/$category/$torrent &&
@@ -76,7 +77,8 @@ full_download() {
 
   wait &&
   find $mountpoint/sendhome -type d -empty -delete &&
-  cat "$tmpdir/*"
+  cat "$tmpdir/"*
+  rm -r "$tmpdir"
 }
 
 full_download

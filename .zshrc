@@ -100,5 +100,5 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
-  exec sway
+  exec dbus-launch --exit-with-session sway
 fi
